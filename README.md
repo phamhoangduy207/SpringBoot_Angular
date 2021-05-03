@@ -1,1 +1,1 @@
-Spring Boot, Spring Security, Angular, CRUD, JSESSIONID
+Spring Boot, Spring Security, Angular, CRUD, HttpBasic, JSESSIONID
