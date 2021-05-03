@@ -1,1 +1,1 @@
-# SpringBoot_Angular
+Spring Boot, Spring Security, Angular, CRUD, HttpBasic, JSESSIONID
