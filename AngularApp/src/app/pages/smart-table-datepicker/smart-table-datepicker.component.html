@@ -1,0 +1,12 @@
+<div class="input-group">
+    <input [owlDateTimeTrigger]="dt" [owlDateTime]="dt" [(ngModel)]="inputModel" [min]='min' [max]='max' readonly
+        class="form-control">
+</div>
+
+<owl-date-time [pickerType]="'calendar'" (afterPickerClosed)="onChange()" #dt>
+</owl-date-time>
+<!--
+    <div *ngIf="dateTime.invalid && dateTime.errors.owlDateTimeMax">
+    Date Time value must before {{max | date: 'medium'}}
+</div>
+-->

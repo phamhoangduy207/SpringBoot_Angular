@@ -1,0 +1,18 @@
+<nb-layout >
+    <nb-layout-header fixed>
+        <app-header></app-header>
+    </nb-layout-header>
+
+    <nb-layout-column>
+        <router-outlet></router-outlet>
+    </nb-layout-column>
+
+    <nb-sidebar>
+            <nb-menu tag="menu" [items]="items" autoCollapse="true">
+            </nb-menu>
+    </nb-sidebar>
+
+    <nb-layout-footer>
+        <b>@Made by me, based on Akveo's ngx-admin</b>
+    </nb-layout-footer>
+</nb-layout>
