@@ -31,6 +31,7 @@ import { RouterModule } from '@angular/router';
 import { PagesComponent } from './pages.component';
 import { HeaderComponent } from './header/header.component';
 import { LogoutComponent } from './logout/logout.component';
+import { CategoriesComponent } from './categories/categories.component';
 
 export const MY_CUSTOM_FORMATS = {
   fullPickerInput: 'DD MMM YYYY',
@@ -71,6 +72,7 @@ export const MY_CUSTOM_FORMATS = {
     SmartTableDatepickerRenderComponent,
     HeaderComponent,
     LogoutComponent,
+    CategoriesComponent,
   ],
   entryComponents: [
     SmartTableDatepickerComponent,
