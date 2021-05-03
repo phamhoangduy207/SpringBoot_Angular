@@ -19,7 +19,6 @@ export class HttpinterceptorService implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     req = req.clone({
-      
       //automatically send Cookie header
       withCredentials: true,
     });

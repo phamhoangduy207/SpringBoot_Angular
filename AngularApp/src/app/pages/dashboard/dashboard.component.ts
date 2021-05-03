@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { map } from 'rxjs/operators';
 import { AuthService } from '../../shared/auth.service';
 
 @Component({
@@ -9,14 +10,18 @@ import { AuthService } from '../../shared/auth.service';
 })
 export class DashboardComponent implements OnInit {
 
-  greeting = {
-
-  };
 
   constructor(private http: HttpClient, public authService: AuthService) { 
   }
 
+  name: any;
+
   ngOnInit(): void {
+    this.authService.getUserName().subscribe({
+      next: (res: string) => {
+        this.name = res;
+      }
+    })
   }
 
 }

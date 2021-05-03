@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ColdObservable } from 'rxjs/internal/testing/ColdObservable';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -13,20 +12,19 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   authenticationService(username, password) {
-    console.log('Staring authService')
+    console.log('Staring authService');
     return this.http
       .get(`http://localhost:8080/auth/login`, {
         headers: {
           //basic token based on username and password, recieve a sessionid
           Authorization: this.createBasicAuthToken(username, password),
-        }, 
+        },
       })
       .pipe(
         map((res) => {
           this.sessionid = Object.values(res);
           console.log('Lấy ra coi chơi: ' + this.sessionid);
           this.credentials.username = username;
-          this.credentials.password = window.btoa(username +":"+ password);
           this.registerSuccessfulLogin(this.credentials);
         })
       );
@@ -38,7 +36,7 @@ export class AuthService {
   }
 
   registerSuccessfulLogin(obj) {
-    console.log('Storing information')
+    console.log('Storing information');
     sessionStorage.setItem(
       this.USER_NAME_SESSION_ATTRIBUTE_NAME,
       JSON.stringify(Object.values(obj))
@@ -61,6 +59,12 @@ export class AuthService {
     let user = sessionStorage.getItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME);
     if (user === null) return '';
     let usr = JSON.parse(user);
-    return usr;
+    return usr[0];
+  }
+
+  getUserName() {
+    return this.http.get('http://localhost:8080/api/greeting', {
+      responseType: 'text',
+    });
   }
 }
