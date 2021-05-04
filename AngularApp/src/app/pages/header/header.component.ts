@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NbMenuService, NbSidebarService, NbThemeService } from "@nebular/theme";
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { LayoutService } from "../../shared/layout.service";
+import { LayoutService } from "../../shared/services/layout.service";
 
 @Component({
   selector: 'app-header',

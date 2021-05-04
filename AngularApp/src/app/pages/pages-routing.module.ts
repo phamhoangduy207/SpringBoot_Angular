@@ -5,6 +5,7 @@ import { BooksComponent } from './books/books.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { PagesComponent } from './pages.component';
 import { LogoutComponent } from './logout/logout.component';
+import { CategoriesComponent } from './categories/categories.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,7 @@ const routes: Routes = [
     children: [
       { path: 'users', component: UsersComponent },
       { path: 'books', component: BooksComponent },
+      { path: 'categories', component: CategoriesComponent },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'logout', component: LogoutComponent },
     ],

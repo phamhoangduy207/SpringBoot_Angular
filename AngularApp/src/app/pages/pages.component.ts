@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NbMenuItem, NbSidebarService } from '@nebular/theme';
-import { AuthService } from '../shared/auth.service';
+import { AuthService } from '../shared/services/auth.service';
 
 @Component({
   selector: 'app-pages',
@@ -31,22 +31,23 @@ export class PagesComponent implements OnInit {
       
     },
     {
-      title: 'Privacy Policy',
-      icon: { icon: 'checkmark-outline', pack: 'eva' },
-    },
-    {
       title: 'Manage',
       icon: 'clipboard-outline',
       children: [
         {
+          title: 'Books',
+          link: 'books',
+          icon: 'book-outline',
+        },
+        {
+          title: 'Categories',
+          link: 'categories',
+          icon: 'book-open-outline',
+        },
+        {
           title: 'Users',
           link: 'users',
           icon: 'person-outline',
-        },
-        {
-          title: 'Books',
-          link: 'books',
-          icon: 'cube-outline',
         },
       ], 
     },

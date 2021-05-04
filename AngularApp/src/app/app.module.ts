@@ -13,7 +13,7 @@ import { AuthModule } from './auth/auth.module';
 import { PagesModule } from './pages/pages.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpinterceptorService } from './shared/httpinterceptor.service';
+import { HttpinterceptorService } from './shared/services/httpinterceptor.service';
 
 @NgModule({
   declarations: [AppComponent],

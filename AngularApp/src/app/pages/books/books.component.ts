@@ -2,8 +2,9 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ToastrService } from 'ngx-toastr';
-import { Book } from '../../shared/book.model';
-import { RestApiService } from '../../shared/restapi.service';
+import { Category } from 'src/app/shared/models/category.model';
+import { Book } from '../../shared/models/book.model';
+import { RestApiService } from '../../shared/services/restapi.service';
 import {
   SmartTableDatepickerComponent,
   SmartTableDatepickerRenderComponent,
@@ -17,7 +18,15 @@ import {
 export class BooksComponent {
   src: LocalDataSource = new LocalDataSource();
   listBooks: any[];
-
+  listCats: any[];
+  constructor(
+    private service: RestApiService,
+    private http: HttpClient,
+    private toastr: ToastrService
+  ) {
+    this.refreshList();
+    this.getCategories();
+  }
   refreshList() {
     this.service.getBooks().subscribe({
       next: (data) => {
@@ -32,13 +41,20 @@ export class BooksComponent {
     console.log(this.src);
   }
 
-  constructor(
-    private service: RestApiService,
-    private http: HttpClient,
-    private toastr: ToastrService
-  ) {
-    this.refreshList();
+  getCategories(){
+    this.service.getCats().subscribe({
+      next: (data) => {
+        this.listCats = (data as unknown) as Category[];
+        console.log(this.listCats);
+        for(const i of this.listCats){
+          this.settings.columns.category.editor.config.list.push({value: i.description, title: i.description});
+          this.settings.columns.category.filter.config.list.push({value: i.description, title: i.description});
+          this.settings = Object.assign({}, this.settings);
+        }
+      }
+    })
   }
+
   settings = {
     pager: {
       display: true,
@@ -78,8 +94,22 @@ export class BooksComponent {
         width: '14%',
       },
       category: {
+        type: 'html',
         title: 'Category',
-        type: 'string',
+        editor: {
+          type: 'list',
+          config: {
+            selectText: 'Select one',
+            list: []
+          },
+        },
+        filter: {
+          type: 'list',
+          config: {
+            selectText: 'Select one',
+            list: [],
+          },
+        },
         width: '20%',
       },
       published: {
@@ -103,6 +133,10 @@ export class BooksComponent {
         type: 'number',
         width: '10%',
       },
+      imageURL: {
+        title: 'Cover',
+        type: 'string',
+      }
     },
   };
   onDeleteConfirm(event: any): void {
@@ -130,6 +164,7 @@ export class BooksComponent {
       authorName: event.newData.authorName,
       published: event.newData.published,
       price: event.newData.price,
+      imageURL: event.newData.imageURL
     };
     console.log(event.newData);
     this.http.post(this.service.baseURL + '/books', data).subscribe(
@@ -155,6 +190,7 @@ export class BooksComponent {
       authorName: event.newData.authorName,
       published: event.newData.published,
       price: event.newData.price,
+      imageURL: event.newData.imageURL,
       book_id: event.newData.book_id,
     };
     this.http

@@ -22,7 +22,7 @@ import {
   SmartTableDatepickerComponent,
   SmartTableDatepickerRenderComponent,
 } from './smart-table-datepicker/smart-table-datepicker.component';
-import { LayoutService } from '../shared/layout.service';
+import { LayoutService } from '../shared/services/layout.service';
 import { PagesRoutingModule } from './pages-routing.module';
 import { UsersComponent } from './users/users.component';
 import { BooksComponent } from './books/books.component';

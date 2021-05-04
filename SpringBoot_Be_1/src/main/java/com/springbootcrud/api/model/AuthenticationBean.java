@@ -1,7 +1,5 @@
 package com.springbootcrud.api.model;
 
-import javax.servlet.http.HttpSession;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

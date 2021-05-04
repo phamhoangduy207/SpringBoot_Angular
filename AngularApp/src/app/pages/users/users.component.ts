@@ -2,8 +2,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ToastrService } from 'ngx-toastr';
-import { User } from "../../shared/user.model";
-import { RestApiService } from '../../shared/restapi.service';
+import { User } from "../../shared/models/user.model";
+import { RestApiService } from '../../shared/services/restapi.service';
 import { SmartTableDatepickerComponent, SmartTableDatepickerRenderComponent } from '../smart-table-datepicker/smart-table-datepicker.component'
 
 
@@ -94,6 +94,10 @@ export class UsersComponent {
         type: 'string',
         width: '28%'
       },
+      imageURL: {
+        title: 'Image',
+        type: 'string',
+      }
     },
     
   };
