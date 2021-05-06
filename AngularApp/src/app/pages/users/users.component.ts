@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
@@ -21,14 +22,14 @@ export class UsersComponent {
     this.service.getUsers().subscribe({
       next: data => {
         this.listUsers = data as unknown as User[];
-        console.log(this.listUsers);
+        //console.log(this.listUsers);
         this.src.load(this.listUsers);
       },
       error: err => {
         console.error("There was an error", err);
       }
     });
-    console.log(this.src);
+    //console.log(this.src);
   }
 
   constructor(
@@ -64,6 +65,7 @@ export class UsersComponent {
       user_id: {
         title: 'Id',
         type: 'number',
+        sortDirection: 'asc',
         width: '5%',
         class: 'custom',
         editable: false
@@ -81,9 +83,9 @@ export class UsersComponent {
       birthday: {
         title: 'Birthday',
         type: 'custom',
+        compareFunction: sortDate,
         renderComponent: SmartTableDatepickerRenderComponent,
         width: '28%',
-        sortDirection: 'desc',
         editor: {
           type: 'custom',
           component: SmartTableDatepickerComponent,
@@ -96,10 +98,27 @@ export class UsersComponent {
       },
       imageURL: {
         title: 'Image',
-        type: 'string',
+        type: 'html',
+        filter: false,
+        sort: false,
+        valuePrepareFunction: (url) => {
+          return `<img src ="${url}" width = "80px" height ="80px" />`;
+        }
       }
     },
     
   };
   
+}
+export const sortDate = (direction: any, a: string, b: string): number => {
+  let first = Number(new DatePipe('en-US').transform(a, 'yyyyMMdd'));
+  let second = Number(new DatePipe('en-US').transform(b, 'yyyyMMdd'));
+
+  if (first < second) {
+      return -1 * direction;
+  }
+  if (first > second) {
+      return direction;
+  }
+  return 0;
 }

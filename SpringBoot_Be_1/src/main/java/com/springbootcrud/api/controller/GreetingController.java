@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springbootcrud.api.model.CustomUserDetails;
-
+import com.springbootcrud.api.model.Greeting;
 
 
 
@@ -16,10 +16,11 @@ import com.springbootcrud.api.model.CustomUserDetails;
 @RestController
 @RequestMapping("api/")
 public class GreetingController {
-	
+
 	@GetMapping("/greeting")
-	public String greeting(Authentication auth) {
+	public Greeting greeting(Authentication auth) {
 		CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
-		return user.getFullName();
+		return new Greeting(user.getFullName(), user.getImageUrl());
 	}
+	
 }

@@ -6,7 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class Greeting {
-	private final long id;
-	private final String content;
-	
+	private final String fullName;
+	private final String imageURL;
 }

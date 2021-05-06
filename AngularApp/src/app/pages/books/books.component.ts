@@ -1,7 +1,10 @@
+import { DatePipe } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
+
 import { LocalDataSource } from 'ng2-smart-table';
 import { ToastrService } from 'ngx-toastr';
+import { isNumeric } from 'rxjs/internal/util/isNumeric';
 import { Category } from 'src/app/shared/models/category.model';
 import { Book } from '../../shared/models/book.model';
 import { RestApiService } from '../../shared/services/restapi.service';
@@ -15,6 +18,7 @@ import {
   templateUrl: './books.component.html',
   styleUrls: ['./books.component.scss'],
 })
+
 export class BooksComponent {
   src: LocalDataSource = new LocalDataSource();
   listBooks: any[];
@@ -31,21 +35,20 @@ export class BooksComponent {
     this.service.getBooks().subscribe({
       next: (data) => {
         this.listBooks = (data as unknown) as Book[];
-        console.log(this.listBooks);
         this.src.load(this.listBooks);
       },
       error: (err) => {
         console.error('There was an error', err);
       },
     });
-    console.log(this.src);
+    //console.log(this.src);
   }
 
   getCategories() {
     this.service.getCats().subscribe({
       next: (data) => {
         this.listCats = (data as unknown) as Category[];
-        console.log(this.listCats);
+        //console.log(this.listCats);
         for (const i of this.listCats) {
           this.settings.columns.category.editor.config.list.push({
             value: i.cat_id,
@@ -61,10 +64,11 @@ export class BooksComponent {
     });
   }
 
+
   settings = {
     pager: {
       display: true,
-      perPage: 6,
+      perPage: 5,
     },
     actions: {
       position: 'right',
@@ -100,6 +104,7 @@ export class BooksComponent {
       },
       category: {
         title: 'Category',
+        type: 'string',
         editor: {
           type: 'list',
           config: {
@@ -114,19 +119,20 @@ export class BooksComponent {
             list: [],
           },
         },
-        valuePrepareFunction: (cell: { cat_id: any; description: any }) => {
+        valuePrepareFunction: (cell?: { cat_id: number; description: string }) => {
           return cell.description;
         },
         filterFunction: (cell?: any, search?: string) => {
           search = this.settings.columns.category.filter.config.list[0].title;
           if (search.length > 0) 
-          return cell.description.match(search);
+            return cell.description.match(search);
         },
         width: '20%',
       },
       published: {
         title: 'Published',
         type: 'custom',
+        compareFunction: sortDate,
         renderComponent: SmartTableDatepickerRenderComponent,
         width: '28%',
         sortDirection: 'desc',
@@ -147,13 +153,17 @@ export class BooksComponent {
       },
       imageURL: {
         title: 'Cover',
-        type: 'string',
+        type: 'html',
         filter: false,
+        sort: false,
+        valuePrepareFunction: (url) => {
+          return `<img src ="${url}" width = "80px" height ="80px" />`;
+        }
       },
     },
   };
   onDeleteConfirm(event: any): void {
-    console.log(event.data.book_id);
+    //console.log(event.data.book_id);
     if (window.confirm('Are you sure you want to delete this?')) {
       this.service.deleteBooks(event.data.book_id).subscribe(
         (res) => {
@@ -181,21 +191,37 @@ export class BooksComponent {
       price: event.newData.price,
       imageURL: event.newData.imageURL,
     };
-    console.log(event.newData);
-    this.http.post(this.service.baseURL + '/books', data).subscribe(
-      (res) => {
-        event.confirm.resolve(event.newData);
-        this.refreshList();
-        this.toastr.success('New book added!', 'Success');
-      },
-      (err: HttpErrorResponse) => {
-        if (err.error instanceof Error) {
-          console.log('Client-side error occured.');
-        } else {
-          console.log('Server-side error occured.');
+    if(data.title === ''){
+      this.toastr.warning('Title can not be blank!', 'Warning');
+    } else if(data.category.cat_id === ""){
+      this.toastr.warning('Please choose a category!', 'Warning');
+    } else if(data.authorName === ''){
+      this.toastr.warning('Please provide author name!', 'Warning');
+    } else if(data.published === ''){
+      this.toastr.warning('Please pick a published day!', 'Warning');
+    } else if(data.price === ''){
+      this.toastr.warning('Please fill in a price for the book!', 'Warning');
+    } else if(!isNumeric(data.price)){
+      this.toastr.warning('Invalid price!', 'Warning');
+    } else if(data.imageURL === ''){
+      this.toastr.warning('Please pick a cover image!', 'Warning');
+    } else {
+      this.http.post(this.service.baseURL + '/books', data).subscribe(
+        (res) => {
+          event.confirm.resolve(event.newData);
+          this.refreshList();
+          this.toastr.success('New book added!');
+        },
+        (err: HttpErrorResponse) => {
+          if (err.error instanceof Error) {
+            console.log('Client-side error occured.');
+          } else {
+            console.log('Server-side error occured.');
+          }
         }
-      }
-    );
+      );
+    }
+    //console.log(event.newData);
   }
 
   onSaveConfirm(event: any): void {
@@ -207,14 +233,25 @@ export class BooksComponent {
       imageURL: event.newData.imageURL,
       book_id: event.newData.book_id,
     };
-    this.http
-      .put(`${this.service.baseURL + '/books'}/${event.newData.book_id}`, data)
-      .subscribe(
+    if(data.title === ''){
+      this.toastr.warning('Title can not be blank!', 'Warning');
+    } else if(data.authorName === ''){
+      this.toastr.warning('Please provide author name!', 'Warning');
+    } else if(data.published === ''){
+      this.toastr.warning('Please pick a published day!', 'Warning');
+    } else if(data.price === ''){
+      this.toastr.warning('Please fill in a price for the book!', 'Warning');
+    } else if(!isNumeric(data.price)){
+      this.toastr.warning('Invalid price!', 'Warning');
+    } else if(data.imageURL === ''){
+      this.toastr.warning('Please pick a cover image!', 'Warning');
+    } else {
+      this.http.put(`${this.service.baseURL + '/books'}/${event.newData.book_id}`, data).subscribe(
         (res) => {
-          console.log(res);
+          //console.log(res);
           event.confirm.resolve(event.newData);
           this.refreshList();
-          this.toastr.success('Book details Edited', 'Success');
+          this.toastr.success('Book details Edited');
         },
         (err: HttpErrorResponse) => {
           if (err.error instanceof Error) {
@@ -224,5 +261,20 @@ export class BooksComponent {
           }
         }
       );
+    }  
   }
+}
+
+//date sorting
+export const sortDate = (direction: any, a: string, b: string): number => {
+  let first = Number(new DatePipe('en-US').transform(a, 'yyyyMMdd'));
+  let second = Number(new DatePipe('en-US').transform(b, 'yyyyMMdd'));
+
+  if (first < second) {
+      return -1 * direction;
+  }
+  if (first > second) {
+      return direction;
+  }
+  return 0;
 }

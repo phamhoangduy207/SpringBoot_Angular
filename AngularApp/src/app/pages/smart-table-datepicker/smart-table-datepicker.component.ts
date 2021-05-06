@@ -19,7 +19,7 @@ export class SmartTableDatepickerComponent
 
   constructor(private dateTimeAdapter: DateTimeAdapter<any>) {
     super();
-   // dateTimeAdapter.setLocale('vi-VN');
+    dateTimeAdapter.setLocale('en');
   }
 
   ngOnInit() {
@@ -40,25 +40,25 @@ export class SmartTableDatepickerComponent
         cellValue.getTime() <= this.max.getTime()
       ) {
         this.inputModel = cellValue;
-        this.cell.newValue = this.inputModel.toLocaleDateString();
+        this.cell.newValue = this.inputModel.toDateString();
       }
     }
 
     if (!this.inputModel) {
       this.inputModel = this.max;
-      this.cell.newValue = this.inputModel.toLocaleDateString();
+      this.cell.newValue = this.inputModel.toDateString();
     }
   }
 
   onChange() {
     if (this.inputModel) {
-      this.cell.newValue = this.inputModel.toLocaleDateString();
+      this.cell.newValue = this.inputModel.toDateString();
     }
   }
 }
 
 @Component({
-  template: ` {{ value | date: 'medium' }} `,
+  template: ` {{ value | date }} `,
 })
 export class SmartTableDatepickerRenderComponent implements ViewCell, OnInit {
   @Input() value: string;

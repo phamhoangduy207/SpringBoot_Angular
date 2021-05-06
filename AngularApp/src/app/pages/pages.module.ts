@@ -33,9 +33,10 @@ import { HeaderComponent } from './header/header.component';
 import { LogoutComponent } from './logout/logout.component';
 import { CategoriesComponent } from './categories/categories.component';
 
-export const MY_CUSTOM_FORMATS = {
-  fullPickerInput: 'DD MMM YYYY',
-  datePickerInput: 'DD MMM YYYY',
+export const MY_MOMENT_FORMATS = {
+  parseInput: 'l LT',
+  fullPickerInput: 'MMM DD YYYY',
+  datePickerInput: 'MMM DD YYYY',
   timePickerInput: 'LT',
   monthYearLabel: 'MMM YYYY',
   dateA11yLabel: 'LL',
@@ -83,7 +84,7 @@ export const MY_CUSTOM_FORMATS = {
     NbSidebarService,
     {
       provide: OWL_DATE_TIME_FORMATS,
-      useValue: MY_CUSTOM_FORMATS,
+      useValue: MY_MOMENT_FORMATS,
     },
   ],
 })

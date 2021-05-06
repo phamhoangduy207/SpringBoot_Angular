@@ -37,6 +37,10 @@ public class CustomUserDetails implements UserDetails {
 		return user.getLastName() +" "+ user.getFirstName();
 	}
 	
+	public String getImageUrl() {
+		return user.getImageURL();
+	}
+	
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;

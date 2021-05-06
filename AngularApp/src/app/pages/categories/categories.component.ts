@@ -25,14 +25,13 @@ export class CategoriesComponent {
     this.service.getCats().subscribe({
       next: (data) => {
         this.listCats = (data as unknown) as Category[];
-        console.log(this.listCats);
         this.src.load(this.listCats);
       },
       error: (err) => {
         console.error('There was an error', err);
       },
     });
-    console.log(this.src);
+    //console.log(this.src);
   }
 
   settings = {
@@ -74,7 +73,7 @@ export class CategoriesComponent {
     },
   };
   onDeleteConfirm(event: any): void {
-    console.log(event.data.cat_id);
+    //console.log(event.data.cat_id);
     if (window.confirm('Are you sure you want to delete this?')) {
       this.service.deleteCats(event.data.cat_id).subscribe(
         (res) => {
@@ -96,21 +95,25 @@ export class CategoriesComponent {
     var data = {
       description: event.newData.description,
     };
-    console.log(event.newData);
-    this.http.post(this.service.baseURL + '/categories', data).subscribe(
-      (res) => {
-        event.confirm.resolve(event.newData);
-        this.refreshList();
-        this.toastr.success('New category added!', 'Success');
-      },
-      (err: HttpErrorResponse) => {
-        if (err.error instanceof Error) {
-          console.log('Client-side error occured.');
-        } else {
-          console.log('Server-side error occured.');
+    //console.log(event.newData);
+    if(data.description === ''){
+      this.toastr.warning('Please provide a description!', 'Warning');
+    } else {
+      this.http.post(this.service.baseURL + '/categories', data).subscribe(
+        (res) => {
+          event.confirm.resolve(event.newData);
+          this.refreshList();
+          this.toastr.success('New category added!');
+        },
+        (err: HttpErrorResponse) => {
+          if (err.error instanceof Error) {
+            console.log('Client-side error occured.');
+          } else {
+            console.log('Server-side error occured.');
+          }
         }
-      }
-    );
+      );
+    }
   }
 
   onSaveConfirm(event: any): void {
@@ -118,14 +121,17 @@ export class CategoriesComponent {
       description: event.newData.description,
       cat_id: event.newData.cat_id,
     };
+    if(data.description === ''){
+      this.toastr.warning('Please provide a description', 'Warning');
+    }
     this.http
       .put(`${this.service.baseURL + '/categories'}/${event.newData.cat_id}`, data)
       .subscribe(
         (res) => {
-          console.log(res);
+          //console.log(res);
           event.confirm.resolve(event.newData);
           this.refreshList();
-          this.toastr.success('Category Edited', 'Success');
+          this.toastr.success('Category Edited');
         },
         (err: HttpErrorResponse) => {
           if (err.error instanceof Error) {
