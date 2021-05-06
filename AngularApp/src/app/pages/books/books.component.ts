@@ -41,18 +41,24 @@ export class BooksComponent {
     console.log(this.src);
   }
 
-  getCategories(){
+  getCategories() {
     this.service.getCats().subscribe({
       next: (data) => {
         this.listCats = (data as unknown) as Category[];
         console.log(this.listCats);
-        for(const i of this.listCats){
-          this.settings.columns.category.editor.config.list.push({value: i.description, title: i.description});
-          this.settings.columns.category.filter.config.list.push({value: i.description, title: i.description});
+        for (const i of this.listCats) {
+          this.settings.columns.category.editor.config.list.push({
+            value: i.cat_id,
+            title: i.description,
+          });
+          this.settings.columns.category.filter.config.list.push({
+            value: i.description,
+            title: i.description,
+          });
           this.settings = Object.assign({}, this.settings);
         }
-      }
-    })
+      },
+    });
   }
 
   settings = {
@@ -81,26 +87,24 @@ export class BooksComponent {
       confirmDelete: true,
     },
     columns: {
-      book_id: {
+      /* book_id: {
         title: 'Id',
         type: 'number',
         width: '5%',
-        class: 'custom',
         editable: false,
-      },
+      }, */
       title: {
         title: 'Title',
         type: 'string',
         width: '14%',
       },
       category: {
-        type: 'html',
         title: 'Category',
         editor: {
           type: 'list',
           config: {
             selectText: 'Select one',
-            list: []
+            list: [],
           },
         },
         filter: {
@@ -109,6 +113,14 @@ export class BooksComponent {
             selectText: 'Select one',
             list: [],
           },
+        },
+        valuePrepareFunction: (cell: { cat_id: any; description: any }) => {
+          return cell.description;
+        },
+        filterFunction: (cell?: any, search?: string) => {
+          search = this.settings.columns.category.filter.config.list[0].title;
+          if (search.length > 0) 
+          return cell.description.match(search);
         },
         width: '20%',
       },
@@ -136,17 +148,18 @@ export class BooksComponent {
       imageURL: {
         title: 'Cover',
         type: 'string',
-      }
+        filter: false,
+      },
     },
   };
   onDeleteConfirm(event: any): void {
     console.log(event.data.book_id);
-    if (window.confirm('Are you sure you want to delete?')) {
-      this.service.deleteBooks(event.data.id).subscribe(
+    if (window.confirm('Are you sure you want to delete this?')) {
+      this.service.deleteBooks(event.data.book_id).subscribe(
         (res) => {
           event.confirm.resolve(event.source.data);
           this.refreshList();
-          this.toastr.info('Book deleted', 'Notification');
+          this.toastr.success('Book deleted', 'Notification');
         },
         (err) => {
           console.log(err);
@@ -160,11 +173,13 @@ export class BooksComponent {
   onCreateConfirm(event: any): void {
     var data = {
       title: event.newData.title,
-      category: event.newData.category,
+      category: {
+        cat_id: event.newData.category,
+      },
       authorName: event.newData.authorName,
       published: event.newData.published,
       price: event.newData.price,
-      imageURL: event.newData.imageURL
+      imageURL: event.newData.imageURL,
     };
     console.log(event.newData);
     this.http.post(this.service.baseURL + '/books', data).subscribe(
@@ -186,7 +201,6 @@ export class BooksComponent {
   onSaveConfirm(event: any): void {
     var data = {
       title: event.newData.title,
-      category: event.newData.category,
       authorName: event.newData.authorName,
       published: event.newData.published,
       price: event.newData.price,
@@ -200,7 +214,7 @@ export class BooksComponent {
           console.log(res);
           event.confirm.resolve(event.newData);
           this.refreshList();
-          this.toastr.info('Book details Edited', 'Success');
+          this.toastr.success('Book details Edited', 'Success');
         },
         (err: HttpErrorResponse) => {
           if (err.error instanceof Error) {

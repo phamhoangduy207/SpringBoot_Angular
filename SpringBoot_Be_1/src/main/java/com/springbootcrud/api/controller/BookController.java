@@ -56,10 +56,10 @@ public class BookController {
 				.orElseThrow(() -> new ResourceNotFoundException("Book not found for this id:: " + bookid));
 
 		book.setTitle(bookDetails.getTitle());
-		book.setCategory(bookDetails.getCategory());
 		book.setAuthorName(bookDetails.getAuthorName());
 		book.setPublished(bookDetails.getPublished());
 		book.setPrice(bookDetails.getPrice());
+		book.setImageURL(bookDetails.getImageURL());
 
 		final Book updatedBook = bookRepository.save(book);
 		return ResponseEntity.ok(updatedBook);
