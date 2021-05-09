@@ -1,12 +1,11 @@
-<nb-card>
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="info" nbSpinnerSize="giant" nbSpinnerMessage="">
     <nb-card-header>
-        Books
+        <h5>Books</h5>
     </nb-card-header>
-    <nb-card-body>
-        <ng2-smart-table [settings]="settings" [source]="src" 
-            (deleteConfirm)="onDeleteConfirm($event)"
-            (editConfirm)="onSaveConfirm($event)" 
-            (createConfirm)="onCreateConfirm($event)">
+    <nb-card-body>  
+        <button nbTooltip="Reset filters" nbButton status="" (click)="showAll()"><nb-icon icon="refresh-outline"></nb-icon></button>
+        <ng2-smart-table [settings]="settings" [source]="src" (deleteConfirm)="onDeleteConfirm($event)"
+            (editConfirm)="onSaveConfirm($event)" (createConfirm)="onCreateConfirm($event)">
         </ng2-smart-table>
     </nb-card-body>
 </nb-card>

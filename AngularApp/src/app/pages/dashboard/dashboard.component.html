@@ -1,5 +1,36 @@
-<div>
-    <h3>Current user:</h3>
-    <img src="{{user.imageURL}}" width="150px" height="150px">
-    <p><strong>{{user.fullName}}</strong></p>
+<div class="card-row">
+    <div class="card-col">
+        <a href="admin/books">
+            <nb-card accent="info" size="tiny" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="giant" nbSpinnerMessage="">
+                <nb-card-header>
+                    <h4>Books<span>&nbsp;<nb-icon icon="book-outline"></nb-icon></span></h4>
+                </nb-card-header>
+                <nb-card-body>
+                    <h5>Number of books: {{nbook}}</h5>
+                </nb-card-body>
+            </nb-card>
+        </a>
+        <a href="admin/categories">
+            <nb-card accent="danger" size="tiny" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="giant" nbSpinnerMessage="">
+                <nb-card-header>
+                    <h4>Categories<span>&nbsp;<nb-icon icon="book-open-outline" ></nb-icon></span></h4>
+                </nb-card-header>
+                <nb-card-body>
+                    <h5>Numer of categories: {{ncat}}</h5>
+                </nb-card-body>
+            </nb-card>
+        </a>
+    </div>
+    <div class="card-col">
+        <a href="admin/users">
+            <nb-card size="tiny" accent='warning' [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="giant" nbSpinnerMessage="">
+                <nb-card-header>
+                    <h4>Users<span>&nbsp;<nb-icon icon="person-outline"></nb-icon></span></h4>
+                </nb-card-header>
+                <nb-card-body>
+                    <h5>Numer of Users: {{nuser}}</h5>
+                </nb-card-body>
+            </nb-card>
+        </a>
+    </div>
 </div>

@@ -35,9 +35,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/**/**")
             .authenticated()
             .and()
-            .httpBasic()
+            .logout().deleteCookies("JSESSIONID")
             .and()
-            .cors();
+            .cors()
+            .and()
+            .httpBasic();
 	}
 
 	@Bean

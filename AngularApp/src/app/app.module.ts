@@ -5,6 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NbThemeModule } from '@nebular/theme';
 
+
+
 import { DEFAULT_THEME } from './styles/theme.default';
 import { COSMIC_THEME } from './styles/theme.cosmic';
 import { CORPORATE_THEME } from './styles/theme.corporate';
@@ -26,6 +28,7 @@ import { HttpinterceptorService } from './shared/services/httpinterceptor.servic
     PagesModule,
     BrowserModule,
     BrowserAnimationsModule,
+
   ],
   bootstrap: [AppComponent],
   providers: [

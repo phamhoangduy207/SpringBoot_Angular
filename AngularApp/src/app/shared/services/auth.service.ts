@@ -12,7 +12,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   authenticationService(username, password) {
-    console.log('Staring authService');
+    //console.log('Staring authService');
     return this.http
       .get(`http://localhost:8080/auth/login`, {
         headers: {
@@ -23,7 +23,7 @@ export class AuthService {
       .pipe(
         map((res) => {
           this.sessionid = Object.values(res);
-          console.log('Lấy ra coi chơi: ' + this.sessionid);
+          //console.log('Lấy ra coi chơi: ' + this.sessionid);
           this.credentials.username = username;
           this.registerSuccessfulLogin(this.credentials);
         })
@@ -31,12 +31,12 @@ export class AuthService {
   }
 
   createBasicAuthToken(username, password) {
-    console.log('Creating token');
+    //console.log('Creating token');
     return 'Basic ' + window.btoa(username + ':' + password);
   }
 
   registerSuccessfulLogin(obj) {
-    console.log('Storing information');
+    //console.log('Storing information');
     sessionStorage.setItem(
       this.USER_NAME_SESSION_ATTRIBUTE_NAME,
       JSON.stringify(Object.values(obj))
@@ -47,6 +47,7 @@ export class AuthService {
     sessionStorage.removeItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME);
     this.credentials.username = null;
     this.credentials.password = null;
+    return this.http.post('http://localhost:8080/logout', {});
   }
 
   isUserLoggedIn() {

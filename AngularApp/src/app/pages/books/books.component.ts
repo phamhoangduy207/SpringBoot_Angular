@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { LocalDataSource } from 'ng2-smart-table';
 import { ToastrService } from 'ngx-toastr';
@@ -8,6 +8,10 @@ import { isNumeric } from 'rxjs/internal/util/isNumeric';
 import { Category } from 'src/app/shared/models/category.model';
 import { Book } from '../../shared/models/book.model';
 import { RestApiService } from '../../shared/services/restapi.service';
+import {
+  AngularFileUploaderComponent,
+  RenderComponent,
+} from '../angular-file-uploader/angular-file-uploader.component';
 import {
   SmartTableDatepickerComponent,
   SmartTableDatepickerRenderComponent,
@@ -18,11 +22,14 @@ import {
   templateUrl: './books.component.html',
   styleUrls: ['./books.component.scss'],
 })
-
-export class BooksComponent {
+export class BooksComponent implements OnInit{
   src: LocalDataSource = new LocalDataSource();
   listBooks: any[];
   listCats: any[];
+  counter: number = 0;
+
+  loading = false;
+
   constructor(
     private service: RestApiService,
     private http: HttpClient,
@@ -30,7 +37,14 @@ export class BooksComponent {
   ) {
     this.refreshList();
     this.getCategories();
+    this.counter = Object.keys(this.src).length;
   }
+
+  ngOnInit(): void{
+    this.loading = true;
+    setTimeout(() => this.loading = false, 400);
+  }
+
   refreshList() {
     this.service.getBooks().subscribe({
       next: (data) => {
@@ -64,7 +78,10 @@ export class BooksComponent {
     });
   }
 
-
+  showAll(){
+    this.src.reset();
+  }
+  
   settings = {
     pager: {
       display: true,
@@ -100,11 +117,12 @@ export class BooksComponent {
       title: {
         title: 'Title',
         type: 'string',
-        width: '14%',
+        width: '20%',
       },
       category: {
         title: 'Category',
         type: 'string',
+        width: '10%',
         editor: {
           type: 'list',
           config: {
@@ -119,23 +137,23 @@ export class BooksComponent {
             list: [],
           },
         },
-        valuePrepareFunction: (cell?: { cat_id: number; description: string }) => {
+        valuePrepareFunction: (cell?: {
+          cat_id: number;
+          description: string;
+        }) => {
           return cell.description;
         },
         filterFunction: (cell?: any, search?: string) => {
           search = this.settings.columns.category.filter.config.list[0].title;
-          if (search.length > 0) 
-            return cell.description.match(search);
+          if (search.length > 0) return cell.description.match(search);
         },
-        width: '20%',
       },
       published: {
         title: 'Published',
         type: 'custom',
         compareFunction: sortDate,
         renderComponent: SmartTableDatepickerRenderComponent,
-        width: '28%',
-        sortDirection: 'desc',
+        width: '14%',
         editor: {
           type: 'custom',
           component: SmartTableDatepickerComponent,
@@ -144,7 +162,7 @@ export class BooksComponent {
       authorName: {
         title: 'Author',
         type: 'string',
-        width: '28%',
+        width: '20%',
       },
       price: {
         title: 'Price',
@@ -153,12 +171,19 @@ export class BooksComponent {
       },
       imageURL: {
         title: 'Cover',
-        type: 'html',
+        width: '11%',
         filter: false,
         sort: false,
-        valuePrepareFunction: (url) => {
+        /* type: 'html',
+        valuePrepareFunction: (url: any) => {
           return `<img src ="${url}" width = "80px" height ="80px" />`;
-        }
+        }, */
+        type: 'custom',
+        renderComponent: RenderComponent,
+        editor: {
+          type: 'custom',
+          component: AngularFileUploaderComponent,
+        },
       },
     },
   };
@@ -191,19 +216,20 @@ export class BooksComponent {
       price: event.newData.price,
       imageURL: event.newData.imageURL,
     };
-    if(data.title === ''){
+    console.log(event.newData);
+    if (data.title === '') {
       this.toastr.warning('Title can not be blank!', 'Warning');
-    } else if(data.category.cat_id === ""){
+    } else if (data.category.cat_id === '') {
       this.toastr.warning('Please choose a category!', 'Warning');
-    } else if(data.authorName === ''){
+    } else if (data.authorName === '') {
       this.toastr.warning('Please provide author name!', 'Warning');
-    } else if(data.published === ''){
+    } else if (data.published === '') {
       this.toastr.warning('Please pick a published day!', 'Warning');
-    } else if(data.price === ''){
+    } else if (data.price === '') {
       this.toastr.warning('Please fill in a price for the book!', 'Warning');
-    } else if(!isNumeric(data.price)){
+    } else if (!isNumeric(data.price)) {
       this.toastr.warning('Invalid price!', 'Warning');
-    } else if(data.imageURL === ''){
+    } else if (data.imageURL === '') {
       this.toastr.warning('Please pick a cover image!', 'Warning');
     } else {
       this.http.post(this.service.baseURL + '/books', data).subscribe(
@@ -221,7 +247,6 @@ export class BooksComponent {
         }
       );
     }
-    //console.log(event.newData);
   }
 
   onSaveConfirm(event: any): void {
@@ -233,35 +258,40 @@ export class BooksComponent {
       imageURL: event.newData.imageURL,
       book_id: event.newData.book_id,
     };
-    if(data.title === ''){
+    if (data.title === '') {
       this.toastr.warning('Title can not be blank!', 'Warning');
-    } else if(data.authorName === ''){
+    } else if (data.authorName === '') {
       this.toastr.warning('Please provide author name!', 'Warning');
-    } else if(data.published === ''){
+    } else if (data.published === '') {
       this.toastr.warning('Please pick a published day!', 'Warning');
-    } else if(data.price === ''){
+    } else if (data.price === '') {
       this.toastr.warning('Please fill in a price for the book!', 'Warning');
-    } else if(!isNumeric(data.price)){
+    } else if (!isNumeric(data.price)) {
       this.toastr.warning('Invalid price!', 'Warning');
-    } else if(data.imageURL === ''){
+    } else if (data.imageURL === '') {
       this.toastr.warning('Please pick a cover image!', 'Warning');
     } else {
-      this.http.put(`${this.service.baseURL + '/books'}/${event.newData.book_id}`, data).subscribe(
-        (res) => {
-          //console.log(res);
-          event.confirm.resolve(event.newData);
-          this.refreshList();
-          this.toastr.success('Book details Edited');
-        },
-        (err: HttpErrorResponse) => {
-          if (err.error instanceof Error) {
-            console.log('Client-side error occured.');
-          } else {
-            console.log('Server-side error occured.');
+      this.http
+        .put(
+          `${this.service.baseURL + '/books'}/${event.newData.book_id}`,
+          data
+        )
+        .subscribe(
+          (res) => {
+            //console.log(res);
+            event.confirm.resolve(event.newData);
+            this.refreshList();
+            this.toastr.success('Book details Edited');
+          },
+          (err: HttpErrorResponse) => {
+            if (err.error instanceof Error) {
+              console.log('Client-side error occured.');
+            } else {
+              console.log('Server-side error occured.');
+            }
           }
-        }
-      );
-    }  
+        );
+    }
   }
 }
 
@@ -271,10 +301,10 @@ export const sortDate = (direction: any, a: string, b: string): number => {
   let second = Number(new DatePipe('en-US').transform(b, 'yyyyMMdd'));
 
   if (first < second) {
-      return -1 * direction;
+    return -1 * direction;
   }
   if (first > second) {
-      return direction;
+    return direction;
   }
   return 0;
-}
+};

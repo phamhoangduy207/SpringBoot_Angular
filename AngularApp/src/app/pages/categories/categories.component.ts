@@ -14,12 +14,21 @@ export class CategoriesComponent {
 
   src: LocalDataSource = new LocalDataSource();
   listCats: any[];
+  counter: number=0;
+
+  loading = false;
+
   constructor(
     private service: RestApiService,
     private http: HttpClient,
     private toastr: ToastrService
   ) {
     this.refreshList();
+    this.counter = this.src.count();
+
+    //spinner
+    this.loading = true;
+    setTimeout(() => this.loading = false, 400);
   }
   refreshList() {
     this.service.getCats().subscribe({
@@ -31,7 +40,7 @@ export class CategoriesComponent {
         console.error('There was an error', err);
       },
     });
-    //console.log(this.src);
+    console.log(this.src);
   }
 
   settings = {

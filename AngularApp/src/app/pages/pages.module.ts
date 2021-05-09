@@ -8,7 +8,15 @@ import {
   NbLayoutModule,
   NbMenuModule,
   NbSidebarService,
+  NbActionsModule,
+  NbUserModule,
+  NbSearchModule,
+  NbContextMenuModule,
+  NbSpinnerModule,
+  NbButtonModule,
+  NbTooltipModule,
 } from '@nebular/theme';
+
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
@@ -32,6 +40,10 @@ import { PagesComponent } from './pages.component';
 import { HeaderComponent } from './header/header.component';
 import { LogoutComponent } from './logout/logout.component';
 import { CategoriesComponent } from './categories/categories.component';
+import {
+  AngularFileUploaderComponent,
+  RenderComponent,
+} from './angular-file-uploader/angular-file-uploader.component';
 
 export const MY_MOMENT_FORMATS = {
   parseInput: 'l LT',
@@ -47,6 +59,7 @@ export const MY_MOMENT_FORMATS = {
   imports: [
     CommonModule,
     PagesRoutingModule,
+    
     NbLayoutModule,
     NbCardModule,
     NbSidebarModule,
@@ -54,6 +67,14 @@ export const MY_MOMENT_FORMATS = {
     NbMenuModule.forRoot(),
     NbIconModule,
     NbEvaIconsModule,
+    NbActionsModule,
+    NbUserModule,
+    NbSearchModule,
+    NbContextMenuModule,
+    NbSpinnerModule,
+    NbButtonModule,
+    NbTooltipModule,
+
     FormsModule,
     RouterModule,
     ReactiveFormsModule,
@@ -74,6 +95,8 @@ export const MY_MOMENT_FORMATS = {
     HeaderComponent,
     LogoutComponent,
     CategoriesComponent,
+    AngularFileUploaderComponent,
+    RenderComponent,
   ],
   entryComponents: [
     SmartTableDatepickerComponent,
@@ -82,6 +105,9 @@ export const MY_MOMENT_FORMATS = {
   providers: [
     LayoutService,
     NbSidebarService,
+    BooksComponent,
+    CategoriesComponent,
+    UsersComponent,
     {
       provide: OWL_DATE_TIME_FORMATS,
       useValue: MY_MOMENT_FORMATS,

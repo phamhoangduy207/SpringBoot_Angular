@@ -1,39 +1,47 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../shared/services/auth.service';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.scss']
+  styleUrls: ['./auth.component.scss'],
 })
 export class AuthComponent implements OnInit {
-  username: string;
-  password: string;
-  errorMessage = 'Wrong username or password';
-  successMessage: string;
-  invalidLogin = false;
-  loginSuccess = false;
+  form: FormGroup;
+  public invalidLogin = false;
+  public formSubmitAttemp = false;
 
   constructor(
+    private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService) {   }
-
-  ngOnInit() {
+    private authService: AuthService
+  ) {
+    this.form = this.fb.group({
+      username: ['', Validators.email],
+      password: ['', Validators.required]
+    });
   }
+  ngOnInit() {}
 
-
-  handleLogin() {
-    console.log('Calling authService');
-    this.authService.authenticationService(this.username, this.password).subscribe((result)=> {
-      this.invalidLogin = false;
-      this.loginSuccess = true;
-      this.successMessage = 'Login Successful.';
-      this.router.navigate(['admin/dashboard']);
-    }, () => {
-      this.invalidLogin = true;
-      this.loginSuccess = false;
-    });      
+  onSubmit() {
+    if(this.form.valid){
+        const username = this.form.get('username')?.value;
+        const password = this.form.get('password')?.value;
+        this.authService.authenticationService(username, password).subscribe(
+          (res) => {
+            this.router.navigate(['admin/dashboard']);
+          },
+          () => {
+            this.invalidLogin = true;
+          }
+      );
+    }
+    else{
+      this.formSubmitAttemp = true;
+    }   
   }
 }

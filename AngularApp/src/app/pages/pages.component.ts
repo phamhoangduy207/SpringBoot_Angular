@@ -5,18 +5,14 @@ import { AuthService } from '../shared/services/auth.service';
 @Component({
   selector: 'app-pages',
   templateUrl: './pages.component.html',
-  styleUrls: ['./pages.component.scss']
+  styleUrls: ['./pages.component.scss'],
 })
 export class PagesComponent implements OnInit {
+  constructor(private sidebarService: NbSidebarService) {}
 
-  constructor(private sidebarService: NbSidebarService){
-  }
+  ngOnInit(): void {}
 
-  ngOnInit(): void {
-  }
-
-
-  toggle(){
+  toggle() {
     this.sidebarService.toggle(true);
     return false;
   }
@@ -28,33 +24,21 @@ export class PagesComponent implements OnInit {
       title: 'Dashboard',
       link: 'dashboard',
       icon: 'tv-outline',
-      
     },
     {
-      title: 'Manage',
-      icon: 'clipboard-outline',
-      children: [
-        {
-          title: 'Books',
-          link: 'books',
-          icon: 'book-outline',
-        },
-        {
-          title: 'Categories',
-          link: 'categories',
-          icon: 'book-open-outline',
-        },
-        {
-          title: 'Users',
-          link: 'users',
-          icon: 'person-outline',
-        },
-      ], 
+      title: 'Books',
+      link: 'books',
+      icon: 'book-outline',
     },
     {
-      title: 'Log out',
-      link: 'logout',
-      icon: 'log-out-outline'
-    }
+      title: 'Categories',
+      link: 'categories',
+      icon: 'book-open-outline',
+    },
+    {
+      title: 'Users',
+      link: 'users',
+      icon: 'person-outline',
+    },
   ];
 }

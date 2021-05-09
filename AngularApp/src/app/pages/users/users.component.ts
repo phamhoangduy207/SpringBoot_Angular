@@ -17,8 +17,23 @@ export class UsersComponent {
 
   src: LocalDataSource = new LocalDataSource();
   listUsers: any[];
+  counter: number=0;
+  
+  loading = false;
 
-  refreshList(){
+  constructor(
+    private service: RestApiService,
+    private http: HttpClient,
+    private toastr: ToastrService
+  ) {
+    this.refreshList();
+    this.counter = Object.keys(this.src).length;
+
+    this.loading = true;
+    setTimeout(() => this.loading = false, 400);
+   }
+
+   refreshList(){
     this.service.getUsers().subscribe({
       next: data => {
         this.listUsers = data as unknown as User[];
@@ -32,13 +47,6 @@ export class UsersComponent {
     //console.log(this.src);
   }
 
-  constructor(
-    private service: RestApiService,
-    private http: HttpClient,
-    private toastr: ToastrService
-  ) {
-    this.refreshList();
-   }
    settings = {
     pager:{
       display: true,

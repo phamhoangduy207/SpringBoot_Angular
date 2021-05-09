@@ -7,9 +7,8 @@ import { DateTimeAdapter } from 'ng-pick-datetime';
   templateUrl: './smart-table-datepicker.component.html',
   styleUrls: ['./smart-table-datepicker.component.scss'],
 })
-export class SmartTableDatepickerComponent
-  extends DefaultEditor
-  implements OnInit {
+
+export class SmartTableDatepickerComponent extends DefaultEditor implements OnInit {
   @Input() min: Date; // Defaults to now(rounded down to the nearest 15 minute mark)
 
   @Input() max: Date; // Defaults to 1 month after the min

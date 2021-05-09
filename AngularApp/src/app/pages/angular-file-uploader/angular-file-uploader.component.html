@@ -1,0 +1,7 @@
+<!-- <image-upload 
+    [max]="1" 
+    [maxFileSize]="2097152" 
+    (onFileUploadFinish)="onUploadFinished($event)"
+    (onRemove)="onRemoved()">
+</image-upload> -->
+<input type="file" (change)="onUploadFinished($event)">
