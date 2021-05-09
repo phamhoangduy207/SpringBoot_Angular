@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -33,7 +34,7 @@ public class BookController {
 
 	@GetMapping("/books")
 	public List<Book> getBooks() {
-		return this.bookRepository.findAll();
+		return this.bookRepository.findAll(Sort.by(Sort.Direction.ASC, "title"));
 	}
 
 	@GetMapping("/books/{id}")

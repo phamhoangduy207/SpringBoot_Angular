@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ToastrService } from 'ngx-toastr';
 import { isNumeric } from 'rxjs/internal/util/isNumeric';
+import { isEmpty } from 'rxjs/operators';
 import { Category } from 'src/app/shared/models/category.model';
 import { Book } from '../../shared/models/book.model';
 import { RestApiService } from '../../shared/services/restapi.service';
@@ -22,7 +23,7 @@ import {
   templateUrl: './books.component.html',
   styleUrls: ['./books.component.scss'],
 })
-export class BooksComponent implements OnInit{
+export class BooksComponent implements OnInit {
   src: LocalDataSource = new LocalDataSource();
   listBooks: any[];
   listCats: any[];
@@ -40,9 +41,9 @@ export class BooksComponent implements OnInit{
     this.counter = Object.keys(this.src).length;
   }
 
-  ngOnInit(): void{
+  ngOnInit(): void {
     this.loading = true;
-    setTimeout(() => this.loading = false, 400);
+    setTimeout(() => (this.loading = false), 400);
   }
 
   refreshList() {
@@ -78,10 +79,10 @@ export class BooksComponent implements OnInit{
     });
   }
 
-  showAll(){
+  showAll() {
     this.src.reset();
   }
-  
+
   settings = {
     pager: {
       display: true,
@@ -117,12 +118,12 @@ export class BooksComponent implements OnInit{
       title: {
         title: 'Title',
         type: 'string',
-        width: '20%',
+        width: '23%',
       },
       category: {
         title: 'Category',
         type: 'string',
-        width: '10%',
+        width: '12%',
         editor: {
           type: 'list',
           config: {
@@ -144,8 +145,13 @@ export class BooksComponent implements OnInit{
           return cell.description;
         },
         filterFunction: (cell?: any, search?: string) => {
-          search = this.settings.columns.category.filter.config.list[0].title;
-          if (search.length > 0) return cell.description.match(search);
+          this.src.onChanged().subscribe((change) => {
+            if (change.action === 'filter') {   
+              console.log(change.elements);           
+              search = this.settings.columns.category.filter.config.list[change.elements].title;
+            }
+            if (search.length > 0) return cell.description.match(search);
+          });
         },
       },
       published: {
@@ -153,7 +159,7 @@ export class BooksComponent implements OnInit{
         type: 'custom',
         compareFunction: sortDate,
         renderComponent: SmartTableDatepickerRenderComponent,
-        width: '14%',
+        width: '15%',
         editor: {
           type: 'custom',
           component: SmartTableDatepickerComponent,
@@ -162,16 +168,16 @@ export class BooksComponent implements OnInit{
       authorName: {
         title: 'Author',
         type: 'string',
-        width: '20%',
+        width: '22%',
       },
       price: {
         title: 'Price',
         type: 'number',
-        width: '10%',
+        width: '13%',
       },
       imageURL: {
         title: 'Cover',
-        width: '11%',
+        width: '13%',
         filter: false,
         sort: false,
         /* type: 'html',

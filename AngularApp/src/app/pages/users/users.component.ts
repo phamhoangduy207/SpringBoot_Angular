@@ -27,7 +27,7 @@ export class UsersComponent {
     private toastr: ToastrService
   ) {
     this.refreshList();
-    this.counter = Object.keys(this.src).length;
+    this.counter = this.src.count();
 
     this.loading = true;
     setTimeout(() => this.loading = false, 400);
@@ -110,7 +110,7 @@ export class UsersComponent {
         filter: false,
         sort: false,
         valuePrepareFunction: (url) => {
-          return `<img src ="${url}" width = "80px" height ="80px" />`;
+          return `<img src ="${url}" width = "100px" height ="100px" />`;
         }
       }
     },
