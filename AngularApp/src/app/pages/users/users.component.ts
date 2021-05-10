@@ -16,7 +16,7 @@ import { SmartTableDatepickerComponent, SmartTableDatepickerRenderComponent } fr
 export class UsersComponent {
 
   src: LocalDataSource = new LocalDataSource();
-  listUsers: any[];
+  listUsers: User[] = [];
   counter: number=0;
   
   loading = false;
@@ -37,7 +37,7 @@ export class UsersComponent {
     this.service.getUsers().subscribe({
       next: data => {
         this.listUsers = data as unknown as User[];
-        //console.log(this.listUsers);
+        this.counter = this.listUsers.length;
         this.src.load(this.listUsers);
       },
       error: err => {

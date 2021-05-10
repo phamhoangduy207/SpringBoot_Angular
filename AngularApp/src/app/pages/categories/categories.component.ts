@@ -13,7 +13,7 @@ import { RestApiService } from 'src/app/shared/services/restapi.service';
 export class CategoriesComponent {
 
   src: LocalDataSource = new LocalDataSource();
-  listCats: any[];
+  listCats: Category[] = [];
   counter: number=0;
 
   loading = false;
@@ -24,8 +24,6 @@ export class CategoriesComponent {
     private toastr: ToastrService
   ) {
     this.refreshList();
-    this.counter = this.src.count();
-
     //spinner
     this.loading = true;
     setTimeout(() => this.loading = false, 400);
@@ -34,13 +32,14 @@ export class CategoriesComponent {
     this.service.getCats().subscribe({
       next: (data) => {
         this.listCats = (data as unknown) as Category[];
+        this.counter = this.listCats.length;
         this.src.load(this.listCats);
       },
       error: (err) => {
         console.error('There was an error', err);
       },
     });
-    console.log(this.src);
+    //console.log(this.src);
   }
 
   settings = {

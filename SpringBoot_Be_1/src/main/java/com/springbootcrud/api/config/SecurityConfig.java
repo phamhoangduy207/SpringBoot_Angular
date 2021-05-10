@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/**/**")
             .authenticated()
             .and()
-            .logout().deleteCookies("JSESSIONID")
+            .logout().invalidateHttpSession(true).deleteCookies("JSESSIONID")
             .and()
             .cors()
             .and()

@@ -16,6 +16,7 @@ import { PagesModule } from './pages/pages.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpinterceptorService } from './shared/services/httpinterceptor.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -37,6 +38,7 @@ import { HttpinterceptorService } from './shared/services/httpinterceptor.servic
       useClass: HttpinterceptorService,
       multi: true,
     },
+    CookieService
   ],
 })
 export class AppModule {

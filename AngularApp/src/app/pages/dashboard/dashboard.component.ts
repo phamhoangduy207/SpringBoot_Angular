@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../shared/services/auth.service';
+
 import { BooksComponent } from '../books/books.component';
 import { CategoriesComponent } from '../categories/categories.component';
 import { UsersComponent } from '../users/users.component';
@@ -11,11 +12,11 @@ import { UsersComponent } from '../users/users.component';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-
   user: UserDetails;
-  nbook: number = 0;
-  ncat: number = 0;
-  nuser: number = 0;
+  nbook: number;
+  ncat: number;
+  nuser: number;
+
 
   loading = false;
 
@@ -27,13 +28,13 @@ export class DashboardComponent implements OnInit {
     public authService: AuthService
   ) {
     this.loading = true;
-    setTimeout(() => this.loading = false, 400);
+    setTimeout(() => (this.loading = false), 400);
+
     this.nbook = this.book.counter;
     this.ncat = this.cat.counter;
     this.nuser = this.usr.counter;
+
   }
-
-
 
   ngOnInit(): void {
     /* this.authService.getUserName().subscribe({
@@ -42,6 +43,7 @@ export class DashboardComponent implements OnInit {
         //console.log(this.user);
       },
     }); */
+
   }
 }
 export interface UserDetails {

@@ -45,7 +45,7 @@ export class RestApiService {
   cat: Category = new Category();
 
   getCats(){
-    return this.http.get<Category>(this.baseURL + "/categories");
+    return this.http.get<Category>(this.baseURL + "/categories") 
   }
 
   createCats(){

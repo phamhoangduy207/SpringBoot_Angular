@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -8,8 +9,7 @@ import { map } from 'rxjs/operators';
 export class AuthService {
   USER_NAME_SESSION_ATTRIBUTE_NAME = 'authenticatedUser';
   public credentials = { username: '', password: '' };
-  public sessionid;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cookieService: CookieService) {}
 
   authenticationService(username, password) {
     //console.log('Staring authService');
@@ -22,8 +22,7 @@ export class AuthService {
       })
       .pipe(
         map((res) => {
-          this.sessionid = Object.values(res);
-          //console.log('Lấy ra coi chơi: ' + this.sessionid);
+          //console.log(this.cookieService.get('JSESSIONID'));
           this.credentials.username = username;
           this.registerSuccessfulLogin(this.credentials);
         })
@@ -44,10 +43,10 @@ export class AuthService {
   }
 
   logout() {
-    sessionStorage.removeItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME);
+    sessionStorage.clear();
+    this.cookieService.delete('JSESSIONID', '/', 'localhost');
     this.credentials.username = null;
     this.credentials.password = null;
-    return this.http.post('http://localhost:8080/logout', {});
   }
 
   isUserLoggedIn() {

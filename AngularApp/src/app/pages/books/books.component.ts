@@ -5,7 +5,6 @@ import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ToastrService } from 'ngx-toastr';
 import { isNumeric } from 'rxjs/internal/util/isNumeric';
-import { isEmpty } from 'rxjs/operators';
 import { Category } from 'src/app/shared/models/category.model';
 import { Book } from '../../shared/models/book.model';
 import { RestApiService } from '../../shared/services/restapi.service';
@@ -25,11 +24,12 @@ import {
 })
 export class BooksComponent implements OnInit {
   src: LocalDataSource = new LocalDataSource();
-  listBooks: any[];
+  listBooks: Book[] = [];
   listCats: any[];
   counter: number = 0;
 
   loading = false;
+  searchKey: string = '';
 
   constructor(
     private service: RestApiService,
@@ -38,18 +38,18 @@ export class BooksComponent implements OnInit {
   ) {
     this.refreshList();
     this.getCategories();
-    this.counter = Object.keys(this.src).length;
-  }
-
-  ngOnInit(): void {
     this.loading = true;
     setTimeout(() => (this.loading = false), 400);
   }
+
+  ngOnInit(): void {}
 
   refreshList() {
     this.service.getBooks().subscribe({
       next: (data) => {
         this.listBooks = (data as unknown) as Book[];
+        this.counter = this.listBooks.length;
+        //console.log(this.counter)
         this.src.load(this.listBooks);
       },
       error: (err) => {
@@ -127,14 +127,14 @@ export class BooksComponent implements OnInit {
         editor: {
           type: 'list',
           config: {
-            selectText: 'Select one',
+            //selectText: 'Select one',
             list: [],
           },
         },
         filter: {
           type: 'list',
           config: {
-            selectText: 'Select one',
+            selectText: 'All category',
             list: [],
           },
         },
@@ -146,11 +146,11 @@ export class BooksComponent implements OnInit {
         },
         filterFunction: (cell?: any, search?: string) => {
           this.src.onChanged().subscribe((change) => {
-            if (change.action === 'filter') {   
-              console.log(change.elements);           
-              search = this.settings.columns.category.filter.config.list[change.elements].title;
+            if (change.action === 'filter') {
+              this.searchKey = change.filter.filters[0]['search'];
+              //console.log(this.searchKey === cell.description);
+              return cell.description === this.searchKey;
             }
-            if (search.length > 0) return cell.description.match(search);
           });
         },
       },
