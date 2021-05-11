@@ -25,7 +25,7 @@ import {
 export class BooksComponent implements OnInit {
   src: LocalDataSource = new LocalDataSource();
   listBooks: Book[] = [];
-  listCats: any[];
+  listCats: Category[] = [];
   counter: number = 0;
 
   loading = false;
@@ -40,9 +40,22 @@ export class BooksComponent implements OnInit {
     this.getCategories();
     this.loading = true;
     setTimeout(() => (this.loading = false), 400);
+
+    this.src.onChanged().subscribe((change) => {
+      if (change.action === 'filter') {
+        this.searchKey = change.filter.filters[0]['search'];
+        console.log('search value: ' + this.searchKey);
+      }
+    });
+    this.src.addFilter({field: 'category' , search: this.searchKey,});
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
+
+  showAll() {
+    this.src.reset();
+  }
 
   refreshList() {
     this.service.getBooks().subscribe({
@@ -63,7 +76,7 @@ export class BooksComponent implements OnInit {
     this.service.getCats().subscribe({
       next: (data) => {
         this.listCats = (data as unknown) as Category[];
-        //console.log(this.listCats);
+        //console.log(this.listCats);  
         for (const i of this.listCats) {
           this.settings.columns.category.editor.config.list.push({
             value: i.cat_id,
@@ -78,12 +91,90 @@ export class BooksComponent implements OnInit {
       },
     });
   }
-
-  showAll() {
-    this.src.reset();
-  }
-
   settings = {
+    columns: {
+      /* book_id: {
+        title: 'Id',
+        type: 'number',
+        width: '5%',
+        editable: false,
+      }, */
+      title: {
+        title: 'Title',
+        type: 'string',
+        width: '23%',
+      },
+      category: {
+        title: 'Category',
+        valuePrepareFunction: (cell?: Category) => {
+          return cell.description;
+        },
+        width: '15%',
+        editor: {
+          type: 'list',
+          config: {
+            //selectText: 'Select one',
+            list: [],
+          },
+        },
+        filter: {
+          type: 'list',
+          config: {
+            selectText: '---Select one---',
+            list: [],
+          },
+        },
+        
+        /* filterFunction: async (cell?: any) => {
+          console.log('filterFunction');
+          await this.src.onChanged().subscribe((change) => {
+            if (change.action === 'filter') {
+              this.searchKey = change.filter.filters[0]['search'];
+              console.log('search value: ' + this.searchKey);
+            }
+          });
+          console.log('conparing');
+          return cell.description === this.searchKey;
+        } */
+      },
+      published: {
+        title: 'Published',
+        type: 'custom',
+        compareFunction: sortDate,
+        renderComponent: SmartTableDatepickerRenderComponent,
+        width: '15%',
+        editor: {
+          type: 'custom',
+          component: SmartTableDatepickerComponent,
+        },
+      },
+      authorName: {
+        title: 'Author',
+        type: 'string',
+        width: '22%',
+      },
+      price: {
+        title: 'Price',
+        type: 'number',
+        width: '10%',
+      },
+      imageURL: {
+        title: 'Cover',
+        width: '13%',
+        filter: false,
+        sort: false,
+        /* type: 'html',
+        valuePrepareFunction: (url: any) => {
+          return `<img src ="${url}" width = "80px" height ="80px" />`;
+        }, */
+        type: 'custom',
+        renderComponent: RenderComponent,
+        editor: {
+          type: 'custom',
+          component: AngularFileUploaderComponent,
+        },
+      },
+    },
     pager: {
       display: true,
       perPage: 5,
@@ -107,90 +198,6 @@ export class BooksComponent implements OnInit {
     delete: {
       deleteButtonContent: '<i class="bi bi-trash"></i>',
       confirmDelete: true,
-    },
-    columns: {
-      /* book_id: {
-        title: 'Id',
-        type: 'number',
-        width: '5%',
-        editable: false,
-      }, */
-      title: {
-        title: 'Title',
-        type: 'string',
-        width: '23%',
-      },
-      category: {
-        title: 'Category',
-        type: 'string',
-        width: '12%',
-        editor: {
-          type: 'list',
-          config: {
-            //selectText: 'Select one',
-            list: [],
-          },
-        },
-        filter: {
-          type: 'list',
-          config: {
-            selectText: 'All category',
-            list: [],
-          },
-        },
-        valuePrepareFunction: (cell?: {
-          cat_id: number;
-          description: string;
-        }) => {
-          return cell.description;
-        },
-        filterFunction: (cell?: any, search?: string) => {
-          this.src.onChanged().subscribe((change) => {
-            if (change.action === 'filter') {
-              this.searchKey = change.filter.filters[0]['search'];
-              //console.log(this.searchKey === cell.description);
-              return cell.description === this.searchKey;
-            }
-          });
-        },
-      },
-      published: {
-        title: 'Published',
-        type: 'custom',
-        compareFunction: sortDate,
-        renderComponent: SmartTableDatepickerRenderComponent,
-        width: '15%',
-        editor: {
-          type: 'custom',
-          component: SmartTableDatepickerComponent,
-        },
-      },
-      authorName: {
-        title: 'Author',
-        type: 'string',
-        width: '22%',
-      },
-      price: {
-        title: 'Price',
-        type: 'number',
-        width: '13%',
-      },
-      imageURL: {
-        title: 'Cover',
-        width: '13%',
-        filter: false,
-        sort: false,
-        /* type: 'html',
-        valuePrepareFunction: (url: any) => {
-          return `<img src ="${url}" width = "80px" height ="80px" />`;
-        }, */
-        type: 'custom',
-        renderComponent: RenderComponent,
-        editor: {
-          type: 'custom',
-          component: AngularFileUploaderComponent,
-        },
-      },
     },
   };
   onDeleteConfirm(event: any): void {

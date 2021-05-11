@@ -36,7 +36,9 @@
 							"node_modules/bootstrap/dist/css/bootstrap.min.css",
 							"node_modules/ng-pick-datetime/assets/style/picker.min.css"			
 						],
-						"scripts": []
+						"scripts": [
+							"src/assets/js/custom.js"
+						]
 					},
 					"configurations": {
 						"production": {

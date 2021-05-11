@@ -17,9 +17,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpinterceptorService } from './shared/services/httpinterceptor.service';
 import { CookieService } from 'ngx-cookie-service';
+import { NotfoundComponent } from './notfound/notfound.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, NotfoundComponent],
   imports: [
     AppRoutingModule,
     AuthModule,
