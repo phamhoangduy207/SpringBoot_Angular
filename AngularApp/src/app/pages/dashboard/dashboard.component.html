@@ -1,43 +1,41 @@
 <div class="card-row">
     <div class="card-col">
-
-        <nb-card accent="info" size="tiny" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="giant"
+        <nb-card accent="info" size="tiny" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="tiny"
             nbSpinnerMessage="">
             <nb-card-header>
-                <a href="admin/books">
+                <a [routerLink]="['/admin/books']">
                     <h4>Books<span>&nbsp;<nb-icon icon="book-outline"></nb-icon></span></h4>
                 </a>
             </nb-card-header>
             <nb-card-body>
-                <h5>Number of books: {{nbook}}</h5>
+                <p>Number of books: <strong>{{nbook}}</strong> </p>
             </nb-card-body>
         </nb-card>
 
-
-        <nb-card accent="danger" size="tiny" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="giant"
+        <nb-card accent="danger" size="tiny" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="tiny"
             nbSpinnerMessage="">
             <nb-card-header>
-                <a href="admin/categories">
+                <a [routerLink]="['/admin/categories']">
                     <h4>Categories<span>&nbsp;<nb-icon icon="book-open-outline"></nb-icon></span></h4>
                 </a>
             </nb-card-header>
             <nb-card-body>
-                <h5>Numer of categories: {{ncat}}</h5>
+                <p>Numer of categories: <strong>{{ncat}}</strong></p>
             </nb-card-body>
         </nb-card>
 
     </div>
     <div class="card-col">
 
-        <nb-card size="tiny" accent='warning' [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="giant"
+        <nb-card size="tiny" accent='warning' [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="tiny"
             nbSpinnerMessage="">
             <nb-card-header>
-                <a href="admin/users">
+                <a [routerLink]="['/admin/users']">
                     <h4>Users<span>&nbsp;<nb-icon icon="person-outline"></nb-icon></span></h4>
                 </a>
             </nb-card-header>
             <nb-card-body>
-                <h5>Numer of Users: {{nuser}}</h5>
+                <p>Numer of Users: <strong>{{nuser}}</strong></p>
             </nb-card-body>
         </nb-card>
     </div>

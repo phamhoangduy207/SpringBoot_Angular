@@ -33,6 +33,10 @@ export class UsersComponent {
     setTimeout(() => this.loading = false, 400);
    }
 
+   showAll() {
+    this.src.reset();
+  }
+
    refreshList(){
     this.service.getUsers().subscribe({
       next: data => {

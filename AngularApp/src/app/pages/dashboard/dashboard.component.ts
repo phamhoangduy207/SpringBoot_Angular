@@ -17,7 +17,6 @@ export class DashboardComponent implements OnInit {
   ncat: number;
   nuser: number;
 
-
   loading = false;
 
   constructor(
@@ -29,11 +28,6 @@ export class DashboardComponent implements OnInit {
   ) {
     this.loading = true;
     setTimeout(() => (this.loading = false), 400);
-
-    this.nbook = this.book.counter;
-    this.ncat = this.cat.counter;
-    this.nuser = this.usr.counter;
-
   }
 
   ngOnInit(): void {
@@ -43,7 +37,9 @@ export class DashboardComponent implements OnInit {
         //console.log(this.user);
       },
     }); */
-
+    this.nbook = this.book.counter;
+    this.ncat = this.cat.counter;
+    this.nuser = this.usr.counter;
   }
 }
 export interface UserDetails {

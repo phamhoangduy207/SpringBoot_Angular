@@ -29,7 +29,6 @@ export class BooksComponent implements OnInit {
   counter: number = 0;
 
   loading = false;
-  searchKey: string = '';
 
   constructor(
     private service: RestApiService,
@@ -40,18 +39,9 @@ export class BooksComponent implements OnInit {
     this.getCategories();
     this.loading = true;
     setTimeout(() => (this.loading = false), 400);
-
-    this.src.onChanged().subscribe((change) => {
-      if (change.action === 'filter') {
-        this.searchKey = change.filter.filters[0]['search'];
-        console.log('search value: ' + this.searchKey);
-      }
-    });
-    this.src.addFilter({field: 'category' , search: this.searchKey,});
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   showAll() {
     this.src.reset();
@@ -61,9 +51,9 @@ export class BooksComponent implements OnInit {
     this.service.getBooks().subscribe({
       next: (data) => {
         this.listBooks = (data as unknown) as Book[];
-        this.counter = this.listBooks.length;
-        //console.log(this.counter)
         this.src.load(this.listBooks);
+        this.counter = this.listBooks.length;
+        console.log(this.counter)
       },
       error: (err) => {
         console.error('There was an error', err);
@@ -76,7 +66,7 @@ export class BooksComponent implements OnInit {
     this.service.getCats().subscribe({
       next: (data) => {
         this.listCats = (data as unknown) as Category[];
-        //console.log(this.listCats);  
+        //console.log(this.listCats);
         for (const i of this.listCats) {
           this.settings.columns.category.editor.config.list.push({
             value: i.cat_id,
@@ -106,17 +96,26 @@ export class BooksComponent implements OnInit {
       },
       category: {
         title: 'Category',
+        editable: false,
         valuePrepareFunction: (cell?: Category) => {
           return cell.description;
+        },
+        filterFunction: (cell?: any, search?: string) => {
+          //console.log(search);
+          return cell.description == search;
         },
         width: '15%',
         editor: {
           type: 'list',
           config: {
-            //selectText: 'Select one',
+            selectText: 'Select one',
             list: [],
           },
         },
+        /* editor: {
+          type: 'custom',
+          
+        }, */
         filter: {
           type: 'list',
           config: {
@@ -124,7 +123,6 @@ export class BooksComponent implements OnInit {
             list: [],
           },
         },
-        
         /* filterFunction: async (cell?: any) => {
           console.log('filterFunction');
           await this.src.onChanged().subscribe((change) => {
