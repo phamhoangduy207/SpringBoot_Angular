@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,8 +20,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Entity
-@Table(name = "books")
+@Entity(name = "books")
+//@Table(name = "books")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -50,7 +51,6 @@ public class Book implements Serializable  {
 	private String imageURL;
 	
 	@ManyToOne
-	@JoinColumn(name = "cat_id", nullable = false)
-
+	@JoinColumn(name = "cat_id", referencedColumnName = "cat_id", nullable = false)
 	private Category category;
 }

@@ -26,6 +26,7 @@ export class BooksComponent implements OnInit {
   src: LocalDataSource = new LocalDataSource();
   listBooks: Book[] = [];
   listCats: Category[] = [];
+  selectList = [];
   counter: number = 0;
 
   loading = false;
@@ -67,13 +68,13 @@ export class BooksComponent implements OnInit {
       next: (data) => {
         this.listCats = (data as unknown) as Category[];
         //console.log(this.listCats);
+        this.selectList.push({
+          value: '',
+          title: 'Select one'
+        });
         for (const i of this.listCats) {
-          this.settings.columns.category.editor.config.list.push({
+          this.selectList.push({
             value: i.cat_id,
-            title: i.description,
-          });
-          this.settings.columns.category.filter.config.list.push({
-            value: i.description,
             title: i.description,
           });
           this.settings = Object.assign({}, this.settings);
@@ -96,7 +97,8 @@ export class BooksComponent implements OnInit {
       },
       category: {
         title: 'Category',
-        editable: false,
+        //editable: false,
+        sort: false,
         valuePrepareFunction: (cell?: Category) => {
           return cell.description;
         },
@@ -108,32 +110,16 @@ export class BooksComponent implements OnInit {
         editor: {
           type: 'list',
           config: {
-            selectText: 'Select one',
-            list: [],
+            list: this.selectList,
           },
         },
-        /* editor: {
-          type: 'custom',
-          
-        }, */
         filter: {
           type: 'list',
           config: {
-            selectText: '---Select one---',
-            list: [],
+            selectText: 'Select one',
+            list: this.selectList,
           },
         },
-        /* filterFunction: async (cell?: any) => {
-          console.log('filterFunction');
-          await this.src.onChanged().subscribe((change) => {
-            if (change.action === 'filter') {
-              this.searchKey = change.filter.filters[0]['search'];
-              console.log('search value: ' + this.searchKey);
-            }
-          });
-          console.log('conparing');
-          return cell.description === this.searchKey;
-        } */
       },
       published: {
         title: 'Published',
@@ -263,12 +249,16 @@ export class BooksComponent implements OnInit {
   onSaveConfirm(event: any): void {
     var data = {
       title: event.newData.title,
+      category: {
+        cat_id: event.newData.category,
+      },
       authorName: event.newData.authorName,
       published: event.newData.published,
       price: event.newData.price,
       imageURL: event.newData.imageURL,
       book_id: event.newData.book_id,
     };
+    console.log(event.newData);
     if (data.title === '') {
       this.toastr.warning('Title can not be blank!', 'Warning');
     } else if (data.authorName === '') {

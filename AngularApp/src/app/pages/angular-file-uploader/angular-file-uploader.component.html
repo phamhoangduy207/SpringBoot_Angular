@@ -1,8 +1,4 @@
-<!-- <image-upload 
-    [max]="1" 
-    [maxFileSize]="2097152" 
-    (onFileUploadFinish)="onUploadFinished($event)"
-    (onRemove)="onRemoved()">
-</image-upload> -->
-<label for="hi">Click here</label>
+<label nbTooltip="Browse an image" class="form-control" for="hi"><img class="rounded mb-3"
+        src="https://cdn.pixabay.com/photo/2012/04/26/19/46/browse-42931_640.png" alt="Browse" width="100"
+        height="80"></label>
 <input id="hi" type="file" (change)="onUploadFinished($event)" style="display: none;">

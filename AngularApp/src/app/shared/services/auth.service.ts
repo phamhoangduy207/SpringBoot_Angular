@@ -43,6 +43,7 @@ export class AuthService {
   }
 
   logout() {
+    console.log('logging out');
     sessionStorage.clear();
     this.cookieService.delete('JSESSIONID', '/', 'localhost');
     this.credentials.username = null;

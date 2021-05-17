@@ -18,8 +18,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Entity
-@Table(name = "categories")
+@Entity(name = "categories")
+//@Table(name = "categories")
 @Getter
 @Setter
 @NoArgsConstructor

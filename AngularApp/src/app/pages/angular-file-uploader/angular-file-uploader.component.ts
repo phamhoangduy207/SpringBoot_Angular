@@ -17,7 +17,7 @@ export class AngularFileUploaderComponent
   ngOnInit(): void {}
 
   onUploadFinished(event) {
-    console.log(event.target.files[0].name);
+    //console.log(event.target.files[0].name);
     this.cell.newValue = event.target.files[0].name;
   }
 

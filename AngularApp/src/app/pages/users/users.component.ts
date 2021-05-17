@@ -113,12 +113,11 @@ export class UsersComponent {
         type: 'html',
         filter: false,
         sort: false,
-        valuePrepareFunction: (url) => {
-          return `<img src ="${url}" width = "100px" height ="100px" />`;
+        valuePrepareFunction: (url: any) => {
+          return `<img src ="${url}" width="100px" height="100px"/>`;
         }
       }
     },
-    
   };
   
 }

@@ -17,7 +17,7 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: '/auth',
+    redirectTo: 'auth',
   },
   {
     path: '404',
@@ -25,7 +25,8 @@ const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: '/404',
+    pathMatch: 'full',
+    redirectTo: '404',
   },
 ];
 

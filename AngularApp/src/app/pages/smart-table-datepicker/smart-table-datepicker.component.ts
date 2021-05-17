@@ -9,9 +9,9 @@ import { DateTimeAdapter } from 'ng-pick-datetime';
 })
 
 export class SmartTableDatepickerComponent extends DefaultEditor implements OnInit {
-  @Input() min: Date; // Defaults to now(rounded down to the nearest 15 minute mark)
+  @Input() min: Date;
 
-  @Input() max: Date; // Defaults to 1 month after the min
+  @Input() max: Date;
 
   stringValue;
   inputModel: Date;
@@ -22,11 +22,11 @@ export class SmartTableDatepickerComponent extends DefaultEditor implements OnIn
   }
 
   ngOnInit() {
+    //setting time range from the last 100 years to today
     if (!this.max) {
       this.max = new Date();
       //this.max.setMinutes(Math.floor(this.max.getMinutes() / 15) * 15);
     }
-
     if (!this.min) {
       this.min = new Date(this.max);
       this.min.setFullYear(this.max.getFullYear() - 100);
@@ -43,6 +43,7 @@ export class SmartTableDatepickerComponent extends DefaultEditor implements OnIn
       }
     }
 
+    //default cell value is today
     if (!this.inputModel) {
       this.inputModel = this.max;
       this.cell.newValue = this.inputModel.toDateString();

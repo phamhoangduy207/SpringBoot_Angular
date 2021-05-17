@@ -19,7 +19,7 @@ import { UserDetails } from '../dashboard/dashboard.component';
 export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
 
-  userMenu = [{ title: 'Profile' }, { title: 'Log out', link: 'logout' }];
+  userMenu = [{ title: 'Profile', link: '404' }, { title: 'Log out', link: 'admin/logout'}];
   userPictureOnly: boolean = false;
   user: UserDetails;
 
