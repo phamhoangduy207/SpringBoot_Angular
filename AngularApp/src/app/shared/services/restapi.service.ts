@@ -4,13 +4,14 @@ import { User } from '../models/user.model';
 import { Book } from "../models/book.model";
 import { AuthService } from './auth.service';
 import { Category } from '../models/category.model';
+import { Author } from '../models/author';
 @Injectable({
   providedIn: 'root'
 })
 export class RestApiService {
 
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient) { }
   
   readonly baseURL = "http://localhost:8080/api";
 
@@ -18,7 +19,7 @@ export class RestApiService {
   user: User = new User(); 
 
   getUsers(){
-    return this.http.get<User>(this.baseURL + "/users");
+    return this.http.get<User>("http://localhost:8080/auth/users");
   }
   
 
@@ -59,5 +60,24 @@ export class RestApiService {
   deleteCats(id:string){
     return this.http.delete(`${this.baseURL + "/categories"}/${id}`);
   }
+
+  //author
+  author: Author = new Author();
+  getAuthors(){
+    return this.http.get<Author>(this.baseURL + "/authors") 
+  }
+
+  createAuthors(){
+    return this.http.post(this.baseURL + "/authors", this.author);
+  }
+
+  updateAuthors(){
+    return this.http.put(`${this.baseURL + "/authors"}/${this.author.author_id}`, this.author);
+  }
+
+  deleteAuthors(id:string){
+    return this.http.delete(`${this.baseURL + "/authors"}/${id}`);
+  }
+  
 }
    

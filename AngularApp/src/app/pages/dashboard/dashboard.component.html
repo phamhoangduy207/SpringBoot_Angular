@@ -8,10 +8,24 @@
                 </a>
             </nb-card-header>
             <nb-card-body>
-                <p>Number of books: <strong>{{nbook}}</strong> </p>
+                <p>Total books: <strong>{{nbook}}</strong> </p>
             </nb-card-body>
         </nb-card>
 
+        <nb-card accent="primary" size="tiny" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="tiny"
+            nbSpinnerMessage="">
+            <nb-card-header>
+                <a [routerLink]="['/admin/authors']">
+                    <h4>Authors<span>&nbsp;<nb-icon icon="edit-2-outline"></nb-icon></span></h4>
+                </a>
+            </nb-card-header>
+            <nb-card-body>
+                <p>Total authors: <strong>{{nauthor}}</strong> </p>
+            </nb-card-body>
+        </nb-card>
+
+    </div>
+    <div class="card-col">
         <nb-card accent="danger" size="tiny" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="tiny"
             nbSpinnerMessage="">
             <nb-card-header>
@@ -20,12 +34,9 @@
                 </a>
             </nb-card-header>
             <nb-card-body>
-                <p>Numer of categories: <strong>{{ncat}}</strong></p>
+                <p>Total categories: <strong>{{ncat}}</strong></p>
             </nb-card-body>
         </nb-card>
-
-    </div>
-    <div class="card-col">
 
         <nb-card size="tiny" accent='warning' [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerSize="tiny"
             nbSpinnerMessage="">
@@ -35,7 +46,7 @@
                 </a>
             </nb-card-header>
             <nb-card-body>
-                <p>Numer of Users: <strong>{{nuser}}</strong></p>
+                <p>Total Users: <strong>{{nuser}}</strong></p>
             </nb-card-body>
         </nb-card>
     </div>

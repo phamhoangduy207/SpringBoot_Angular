@@ -2,18 +2,18 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ToastrService } from 'ngx-toastr';
-import { Category } from 'src/app/shared/models/category.model';
+import { Author } from 'src/app/shared/models/author';
 import { RestApiService } from 'src/app/shared/services/restapi.service';
 
 @Component({
-  selector: 'app-categories',
-  templateUrl: './categories.component.html',
-  styleUrls: ['./categories.component.scss']
+  selector: 'app-author',
+  templateUrl: './author.component.html',
+  styleUrls: ['./author.component.scss']
 })
-export class CategoriesComponent {
+export class AuthorComponent {
 
   src: LocalDataSource = new LocalDataSource();
-  listCats: Category[] = [];
+  listAuthors: Author[] = [];
   counter: number=0;
 
   loading = false;
@@ -29,14 +29,14 @@ export class CategoriesComponent {
     setTimeout(() => this.loading = false, 400);
   }
   refreshList() {
-    this.service.getCats().subscribe({
+    this.service.getAuthors().subscribe({
       next: (data) => {
-        this.listCats = (data as unknown) as Category[];
-        this.counter = this.listCats.length;
-        this.src.load(this.listCats);
+        this.listAuthors = (data as unknown) as Author[];
+        this.counter = this.listAuthors.length;
+        this.src.load(this.listAuthors);
       },
       error: (err) => {
-        console.error('There was an error', err);
+        console.error('There was an error', err.message);
       },
     });
     //console.log(this.src);
@@ -73,8 +73,8 @@ export class CategoriesComponent {
         type: 'number',
         editable: false
       }, */
-      description: {
-        title: 'Description',
+      authorName: {
+        title: 'Name',
         type: 'string',
         width: '95%'
       },
@@ -83,15 +83,15 @@ export class CategoriesComponent {
   onDeleteConfirm(event: any): void {
     //console.log(event.data.cat_id);
     if (window.confirm('Are you sure you want to delete this?')) {
-      this.service.deleteCats(event.data.cat_id).subscribe(
+      this.service.deleteAuthors(event.data.author_id).subscribe(
         (res) => {
           event.confirm.resolve(event.source.data);
           this.refreshList();
-          this.toastr.success('Category deleted', 'Notification');
+          this.toastr.success('Author deleted', 'Notification');
         },
         (err) => {
           if(err.status === 500)
-          this.toastr.error('Can not delete this category because it is currently in used', 'Task failed');
+          this.toastr.error('Can not delete this record because it is currently in used', 'Task failed');
         }
       );
     } else {
@@ -101,23 +101,23 @@ export class CategoriesComponent {
 
   onCreateConfirm(event: any): void {
     var data = {
-      description: event.newData.description,
+      authorName: event.newData.authorName,
     };
     //console.log(event.newData);
-    if(data.description === ''){
-      this.toastr.warning('Please provide a description!', 'Warning');
+    if(data.authorName === ''){
+      this.toastr.warning('Please provide a name!', 'Warning');
     } else {
-      this.http.post(this.service.baseURL + '/categories', data).subscribe(
+      this.http.post(this.service.baseURL + '/authors', data).subscribe(
         (res) => {
           event.confirm.resolve(event.newData);
           this.refreshList();
-          this.toastr.success('New category added!');
+          this.toastr.success('New record added!');
         },
         (err: HttpErrorResponse) => {
           if (err.error instanceof Error) {
             console.log('Client-side error occurred.');
           } else {
-            console.log('Server-side error occurred.');
+            console.log('Server-side error occurred. ' + err.message);
           }
         }
       );
@@ -126,20 +126,20 @@ export class CategoriesComponent {
 
   onSaveConfirm(event: any): void {
     var data = {
-      description: event.newData.description,
-      cat_id: event.newData.cat_id,
+      authorName: event.newData.description,
+      author_id: event.newData.cat_id,
     };
-    if(data.description === ''){
+    if(data.authorName === ''){
       this.toastr.warning('Please provide a description', 'Warning');
     }
     this.http
-      .put(`${this.service.baseURL + '/categories'}/${event.newData.cat_id}`, data)
+      .put(`${this.service.baseURL + '/authors'}/${event.newData.author_id}`, data)
       .subscribe(
         (res) => {
           //console.log(res);
           event.confirm.resolve(event.newData);
           this.refreshList();
-          this.toastr.success('Category Edited');
+          this.toastr.success('Record edited');
         },
         (err: HttpErrorResponse) => {
           if (err.error instanceof Error) {
@@ -150,5 +150,6 @@ export class CategoriesComponent {
         }
       );
   }
+
 
 }

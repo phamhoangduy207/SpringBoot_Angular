@@ -36,6 +36,11 @@ export class PagesComponent implements OnInit {
       icon: 'book-open-outline',
     },
     {
+      title: 'Authors',
+      link: 'authors',
+      icon: 'edit-2-outline',
+    },
+    {
       title: 'Users',
       link: 'users',
       icon: 'person-outline',

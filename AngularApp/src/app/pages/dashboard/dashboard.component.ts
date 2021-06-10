@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { AfterContentChecked, Component, OnInit } from '@angular/core';
 import { AuthService } from '../../shared/services/auth.service';
+import { AuthorComponent } from '../author/author.component';
 
 import { BooksComponent } from '../books/books.component';
 import { CategoriesComponent } from '../categories/categories.component';
@@ -11,8 +12,10 @@ import { UsersComponent } from '../users/users.component';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements AfterContentChecked {
   user: UserDetails;
+
+  nauthor: number;
   nbook: number;
   ncat: number;
   nuser: number;
@@ -20,7 +23,7 @@ export class DashboardComponent implements OnInit {
   loading = false;
 
   constructor(
-    private http: HttpClient,
+    private author: AuthorComponent,
     private book: BooksComponent,
     private cat: CategoriesComponent,
     private usr: UsersComponent,
@@ -30,17 +33,13 @@ export class DashboardComponent implements OnInit {
     setTimeout(() => (this.loading = false), 400);
   }
 
-  ngOnInit(): void {
-    /* this.authService.getUserName().subscribe({
-      next: (res) => {
-        this.user = (JSON.parse(res) as unknown) as UserDetails;
-        //console.log(this.user);
-      },
-    }); */
+  ngAfterContentChecked(){
+    this.nauthor = this.author.counter;
     this.nbook = this.book.counter;
     this.ncat = this.cat.counter;
     this.nuser = this.usr.counter;
   }
+
 }
 export interface UserDetails {
   fullName: '';

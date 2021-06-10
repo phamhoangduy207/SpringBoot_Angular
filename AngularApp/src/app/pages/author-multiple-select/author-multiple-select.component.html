@@ -1,0 +1,3 @@
+<nb-select multiple placeholder="Select authors" [(ngModel)]="displayedModel" onselect="showData()">
+    <nb-option *ngFor="let item of authorsList" [value]="item.author_id">{{item.authorName}}</nb-option>
+</nb-select>

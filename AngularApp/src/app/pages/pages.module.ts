@@ -44,6 +44,8 @@ import {
   AngularFileUploaderComponent,
   RenderComponent,
 } from './angular-file-uploader/angular-file-uploader.component';
+import { AuthorComponent } from './author/author.component';
+import { AuthorMultipleSelectComponent } from './author-multiple-select/author-multiple-select.component';
 
 export const MY_MOMENT_FORMATS = {
   parseInput: 'l LT',
@@ -74,6 +76,7 @@ export const MY_MOMENT_FORMATS = {
     NbSpinnerModule,
     NbButtonModule,
     NbTooltipModule,
+    NbSelectModule,
 
     FormsModule,
     RouterModule,
@@ -97,10 +100,13 @@ export const MY_MOMENT_FORMATS = {
     CategoriesComponent,
     AngularFileUploaderComponent,
     RenderComponent,
+    AuthorComponent,
+    AuthorMultipleSelectComponent,
   ],
   entryComponents: [
     SmartTableDatepickerComponent,
     SmartTableDatepickerRenderComponent,
+    AuthorMultipleSelectComponent
   ],
   providers: [
     LayoutService,
@@ -108,6 +114,7 @@ export const MY_MOMENT_FORMATS = {
     BooksComponent,
     CategoriesComponent,
     UsersComponent,
+    AuthorComponent,
     {
       provide: OWL_DATE_TIME_FORMATS,
       useValue: MY_MOMENT_FORMATS,

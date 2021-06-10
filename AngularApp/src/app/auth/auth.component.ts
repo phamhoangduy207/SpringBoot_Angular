@@ -33,7 +33,7 @@ export class AuthComponent implements OnInit {
         const password = this.form.get('password')?.value;
         this.authService.authenticationService(username, password).subscribe(
           (res) => {
-            this.router.navigate(['admin/users']);
+            this.router.navigate(['admin/dashboard']);
           },
           () => {
             this.invalidLogin = true;

@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ToastrService } from 'ngx-toastr';
 import { isNumeric } from 'rxjs/internal/util/isNumeric';
+import { Author } from 'src/app/shared/models/author';
 import { Category } from 'src/app/shared/models/category.model';
 import { Book } from '../../shared/models/book.model';
 import { RestApiService } from '../../shared/services/restapi.service';
@@ -12,6 +13,7 @@ import {
   AngularFileUploaderComponent,
   RenderComponent,
 } from '../angular-file-uploader/angular-file-uploader.component';
+import { AuthorMultipleSelectComponent } from '../author-multiple-select/author-multiple-select.component';
 import {
   SmartTableDatepickerComponent,
   SmartTableDatepickerRenderComponent,
@@ -26,7 +28,11 @@ export class BooksComponent implements OnInit {
   src: LocalDataSource = new LocalDataSource();
   listBooks: Book[] = [];
   listCats: Category[] = [];
-  selectList = [];
+  listAuthors: Author[] = [];
+  categoriesListForEditor = [];
+  authorsListForEditor = [];
+  categoriesListForFilter = [];
+  authorsListForFilter = [];
   counter: number = 0;
 
   loading = false;
@@ -38,6 +44,7 @@ export class BooksComponent implements OnInit {
   ) {
     this.refreshList();
     this.getCategories();
+    this.getAuthors();
     this.loading = true;
     setTimeout(() => (this.loading = false), 400);
   }
@@ -54,10 +61,9 @@ export class BooksComponent implements OnInit {
         this.listBooks = (data as unknown) as Book[];
         this.src.load(this.listBooks);
         this.counter = this.listBooks.length;
-        console.log(this.counter)
       },
       error: (err) => {
-        console.error('There was an error', err);
+        console.error('There was an error', err.message);
       },
     });
     //console.log(this.src);
@@ -68,12 +74,12 @@ export class BooksComponent implements OnInit {
       next: (data) => {
         this.listCats = (data as unknown) as Category[];
         //console.log(this.listCats);
-        this.selectList.push({
-          value: '',
-          title: 'Select one'
-        });
         for (const i of this.listCats) {
-          this.selectList.push({
+          this.categoriesListForFilter.push({
+            value: i.description,
+            title: i.description,
+          });
+          this.categoriesListForEditor.push({
             value: i.cat_id,
             title: i.description,
           });
@@ -82,6 +88,27 @@ export class BooksComponent implements OnInit {
       },
     });
   }
+
+  getAuthors() {
+    this.service.getAuthors().subscribe({
+      next: (data) => {
+        this.listAuthors = (data as unknown) as Author[];
+        //console.log(this.listCats);
+        for (const i of this.listAuthors) {
+          this.authorsListForFilter.push({
+            value: i.authorName,
+            title: i.authorName,
+          });
+          this.authorsListForEditor.push({
+            value: i.author_id,
+            title: i.authorName,
+          });
+          this.settings = Object.assign({}, this.settings);
+        }
+      },
+    });
+  }
+
   settings = {
     columns: {
       /* book_id: {
@@ -95,6 +122,44 @@ export class BooksComponent implements OnInit {
         type: 'string',
         width: '23%',
       },
+      authors: {
+        title: 'Author',
+        sort: false,
+        valuePrepareFunction: (cell?: Author[]) => {
+          var value = '';
+          for (var i=0; i<cell.length; i++){
+            value += cell[i].authorName + ' & ';
+          }
+          return value.slice(0, -2);
+        },
+        width: '15%',
+        /* type: 'custom',
+        renderComponent: AuthorMultipleSelectRenderComponent, */
+        /* editor: {
+          type: 'list',
+          config: {
+            list: this.authorsListForEditor
+          },
+        }, */
+        editor: {
+          type: 'custom',
+          component: AuthorMultipleSelectComponent
+        },
+        filter: {
+          type: 'list',
+          config: {
+            selectText: '--Select one--',
+            list: this.authorsListForFilter,
+          },
+        },
+        filterFunction: (cell?: any, search?: string) => {
+          for(var i=0; i<cell.length; i++){
+            if(cell[i].authorName == search){
+              return cell[i].authorName == search;
+            }
+          }
+        },
+      },
       category: {
         title: 'Category',
         //editable: false,
@@ -103,21 +168,20 @@ export class BooksComponent implements OnInit {
           return cell.description;
         },
         filterFunction: (cell?: any, search?: string) => {
-          //console.log(search);
           return cell.description == search;
         },
         width: '15%',
         editor: {
           type: 'list',
           config: {
-            list: this.selectList,
+            list: this.categoriesListForEditor,
           },
         },
         filter: {
           type: 'list',
           config: {
-            selectText: 'Select one',
-            list: this.selectList,
+            selectText: '--Select one--',
+            list: this.categoriesListForFilter,
           },
         },
       },
@@ -131,11 +195,6 @@ export class BooksComponent implements OnInit {
           type: 'custom',
           component: SmartTableDatepickerComponent,
         },
-      },
-      authorName: {
-        title: 'Author',
-        type: 'string',
-        width: '22%',
       },
       price: {
         title: 'Price',
@@ -208,7 +267,7 @@ export class BooksComponent implements OnInit {
       category: {
         cat_id: event.newData.category,
       },
-      authorName: event.newData.authorName,
+      authors: event.newData.authors,
       published: event.newData.published,
       price: event.newData.price,
       imageURL: event.newData.imageURL,
@@ -218,7 +277,7 @@ export class BooksComponent implements OnInit {
       this.toastr.warning('Title can not be blank!', 'Warning');
     } else if (data.category.cat_id === '') {
       this.toastr.warning('Please choose a category!', 'Warning');
-    } else if (data.authorName === '') {
+    }  else if (data.authors === '') {
       this.toastr.warning('Please provide author name!', 'Warning');
     } else if (data.published === '') {
       this.toastr.warning('Please pick a published day!', 'Warning');
@@ -237,9 +296,9 @@ export class BooksComponent implements OnInit {
         },
         (err: HttpErrorResponse) => {
           if (err.error instanceof Error) {
-            console.log('Client-side error occured.');
+            console.log('Client-side error occurred.');
           } else {
-            console.log('Server-side error occured.');
+            console.log('Server-side error occurred. ' + err.message);
           }
         }
       );
