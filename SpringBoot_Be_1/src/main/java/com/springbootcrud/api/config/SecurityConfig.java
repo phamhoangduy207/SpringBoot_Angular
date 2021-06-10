@@ -31,15 +31,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable()
             .authorizeRequests()
             .antMatchers("/auth/**")      
+            .permitAll()
+            .antMatchers("/api/**")
             .authenticated()
-            .antMatchers("/api/**/**")
-            .authenticated()
             .and()
-            .logout().invalidateHttpSession(true).deleteCookies("JSESSIONID")
+            .httpBasic()
             .and()
-            .cors()
-            .and()
-            .httpBasic();
+            .cors();
 	}
 
 	@Bean

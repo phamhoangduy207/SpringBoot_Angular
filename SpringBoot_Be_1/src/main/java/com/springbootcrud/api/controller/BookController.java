@@ -63,7 +63,8 @@ public class BookController {
 		
 		book.setTitle(bookDetails.getTitle());	
 		book.setCategory(bookDetails.getCategory());
-		book.setAuthorName(bookDetails.getAuthorName());
+//		book.setAuthorName(bookDetails.getAuthorName());
+		book.setAuthors(bookDetails.getAuthors());
 		book.setPublished(bookDetails.getPublished());		
 		book.setPrice(bookDetails.getPrice());
 		book.setImageURL(bookDetails.getImageURL());

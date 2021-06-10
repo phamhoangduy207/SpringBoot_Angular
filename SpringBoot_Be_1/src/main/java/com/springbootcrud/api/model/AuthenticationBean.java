@@ -11,5 +11,4 @@ import lombok.ToString;
 @ToString
 public class AuthenticationBean {
 	public String message;
-
 }
