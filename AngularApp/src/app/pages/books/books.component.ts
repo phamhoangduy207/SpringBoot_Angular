@@ -58,7 +58,7 @@ export class BooksComponent implements OnInit {
   refreshList() {
     this.service.getBooks().subscribe({
       next: (data) => {
-        this.listBooks = (data as unknown) as Book[];
+        this.listBooks = data as unknown as Book[];
         this.src.load(this.listBooks);
         this.counter = this.listBooks.length;
       },
@@ -72,7 +72,7 @@ export class BooksComponent implements OnInit {
   getCategories() {
     this.service.getCats().subscribe({
       next: (data) => {
-        this.listCats = (data as unknown) as Category[];
+        this.listCats = data as unknown as Category[];
         //console.log(this.listCats);
         for (const i of this.listCats) {
           this.categoriesListForFilter.push({
@@ -92,7 +92,7 @@ export class BooksComponent implements OnInit {
   getAuthors() {
     this.service.getAuthors().subscribe({
       next: (data) => {
-        this.listAuthors = (data as unknown) as Author[];
+        this.listAuthors = data as unknown as Author[];
         //console.log(this.listCats);
         for (const i of this.listAuthors) {
           this.authorsListForFilter.push({
@@ -127,7 +127,7 @@ export class BooksComponent implements OnInit {
         sort: false,
         valuePrepareFunction: (cell?: Author[]) => {
           var value = '';
-          for (var i=0; i<cell.length; i++){
+          for (var i = 0; i < cell.length; i++) {
             value += cell[i].authorName + ' & ';
           }
           return value.slice(0, -2);
@@ -143,7 +143,7 @@ export class BooksComponent implements OnInit {
         }, */
         editor: {
           type: 'custom',
-          component: AuthorMultipleSelectComponent
+          component: AuthorMultipleSelectComponent,
         },
         filter: {
           type: 'list',
@@ -153,8 +153,8 @@ export class BooksComponent implements OnInit {
           },
         },
         filterFunction: (cell?: any, search?: string) => {
-          for(var i=0; i<cell.length; i++){
-            if(cell[i].authorName == search){
+          for (var i = 0; i < cell.length; i++) {
+            if (cell[i].authorName == search) {
               return cell[i].authorName == search;
             }
           }
@@ -200,6 +200,14 @@ export class BooksComponent implements OnInit {
         title: 'Price',
         type: 'number',
         width: '10%',
+        valuePrepareFunction: (value) => {
+          return value === 'Total'
+            ? value
+            : Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+              }).format(value);
+        },
       },
       imageURL: {
         title: 'Cover',
@@ -262,12 +270,19 @@ export class BooksComponent implements OnInit {
   }
 
   onCreateConfirm(event: any): void {
+    var autor = [];
+    for (var i = 0; i < event.newData.authors.length; i++) {
+      autor.push({
+        author_id: event.newData.authors[i],
+      });
+    }
+    console.log(autor)
     var data = {
       title: event.newData.title,
       category: {
         cat_id: event.newData.category,
       },
-      authors: event.newData.authors,
+      authors: autor,
       published: event.newData.published,
       price: event.newData.price,
       imageURL: event.newData.imageURL,
@@ -277,7 +292,7 @@ export class BooksComponent implements OnInit {
       this.toastr.warning('Title can not be blank!', 'Warning');
     } else if (data.category.cat_id === '') {
       this.toastr.warning('Please choose a category!', 'Warning');
-    }  else if (data.authors === '') {
+    } else if (data.authors === null) {
       this.toastr.warning('Please provide author name!', 'Warning');
     } else if (data.published === '') {
       this.toastr.warning('Please pick a published day!', 'Warning');
@@ -306,12 +321,18 @@ export class BooksComponent implements OnInit {
   }
 
   onSaveConfirm(event: any): void {
+    var autor = [];
+    for (var i = 0; i < event.newData.authors.length; i++) {
+      autor.push({
+        author_id: event.newData.authors[i]
+      });
+    }
     var data = {
       title: event.newData.title,
       category: {
         cat_id: event.newData.category,
       },
-      authorName: event.newData.authorName,
+      authors: autor,
       published: event.newData.published,
       price: event.newData.price,
       imageURL: event.newData.imageURL,
@@ -320,7 +341,7 @@ export class BooksComponent implements OnInit {
     console.log(event.newData);
     if (data.title === '') {
       this.toastr.warning('Title can not be blank!', 'Warning');
-    } else if (data.authorName === '') {
+    } else if (data.authors === null) {
       this.toastr.warning('Please provide author name!', 'Warning');
     } else if (data.published === '') {
       this.toastr.warning('Please pick a published day!', 'Warning');
@@ -347,7 +368,7 @@ export class BooksComponent implements OnInit {
             if (err.error instanceof Error) {
               console.log('Client-side error occured.');
             } else {
-              console.log('Server-side error occured.');
+              console.log('Server-side error occured. ' + err.message);
             }
           }
         );

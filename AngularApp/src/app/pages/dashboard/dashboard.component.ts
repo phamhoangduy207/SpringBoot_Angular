@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { AfterContentChecked, Component, OnInit } from '@angular/core';
 import { AuthService } from '../../shared/services/auth.service';
 import { AuthorComponent } from '../author/author.component';

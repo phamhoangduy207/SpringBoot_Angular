@@ -50,7 +50,7 @@ public class BookController {
 
 	}
 
-	@PostMapping("/books")
+	@PostMapping(value = "/books")
 	public Book addBook(@Validated @RequestBody Book book) {
 		return bookRepository.save(book);
 	}

@@ -14,8 +14,8 @@ export class AuthorMultipleSelectComponent extends DefaultEditor implements OnIn
   @Input() value; // data from table
   @Input() rowData;
 
-  authorsList: Author[] = [];
-  displayedModel: any;
+  listItems: Author[] = [];
+  selectedItems: Author[] = [];
 
   constructor(private service: RestApiService) { 
     super();
@@ -24,17 +24,19 @@ export class AuthorMultipleSelectComponent extends DefaultEditor implements OnIn
   getAuthors(){
     return this.service.getAuthors().subscribe({
       next: (data) => {
-        this.authorsList = data as unknown as Author[];
+        this.listItems = data as unknown as Author[];
       }
     })
   }
 
   ngOnInit(): void {
     this.getAuthors();
+
   }
 
-  showData(){
-    this.cell.newValue = this.displayedModel;
+  showOptions(){
+    console.log(this.selectedItems);
+    this.cell.newValue = this.selectedItems;
   }
 
 }
