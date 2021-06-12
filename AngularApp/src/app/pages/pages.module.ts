@@ -15,6 +15,7 @@ import {
   NbSpinnerModule,
   NbButtonModule,
   NbTooltipModule,
+  NbInputModule,
 } from '@nebular/theme';
 
 import { NbEvaIconsModule } from '@nebular/eva-icons';
@@ -45,7 +46,7 @@ import {
   RenderComponent,
 } from './angular-file-uploader/angular-file-uploader.component';
 import { AuthorComponent } from './author/author.component';
-import { AuthorMultipleSelectComponent } from './author-multiple-select/author-multiple-select.component';
+import { AuthorMultipleSelectComponent, CategoryCustomEditorComponent, PriceCustomEditorComponent, TitleCustomEditorComponent } from './author-multiple-select/author-multiple-select.component';
 
 export const MY_MOMENT_FORMATS = {
   parseInput: 'l LT',
@@ -76,7 +77,7 @@ export const MY_MOMENT_FORMATS = {
     NbSpinnerModule,
     NbButtonModule,
     NbTooltipModule,
-    NbSelectModule,
+    NbInputModule,
 
     FormsModule,
     RouterModule,
@@ -102,11 +103,17 @@ export const MY_MOMENT_FORMATS = {
     RenderComponent,
     AuthorComponent,
     AuthorMultipleSelectComponent,
+    TitleCustomEditorComponent,
+    PriceCustomEditorComponent,
+    CategoryCustomEditorComponent
   ],
   entryComponents: [
     SmartTableDatepickerComponent,
     SmartTableDatepickerRenderComponent,
-    AuthorMultipleSelectComponent
+    AuthorMultipleSelectComponent,
+    TitleCustomEditorComponent,
+    PriceCustomEditorComponent,
+    CategoryCustomEditorComponent
   ],
   providers: [
     LayoutService,

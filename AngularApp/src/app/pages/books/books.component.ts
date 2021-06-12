@@ -13,7 +13,7 @@ import {
   AngularFileUploaderComponent,
   RenderComponent,
 } from '../angular-file-uploader/angular-file-uploader.component';
-import { AuthorMultipleSelectComponent } from '../author-multiple-select/author-multiple-select.component';
+import { AuthorMultipleSelectComponent, CategoryCustomEditorComponent, PriceCustomEditorComponent, TitleCustomEditorComponent } from '../author-multiple-select/author-multiple-select.component';
 import {
   SmartTableDatepickerComponent,
   SmartTableDatepickerRenderComponent,
@@ -121,6 +121,14 @@ export class BooksComponent implements OnInit {
         title: 'Title',
         type: 'string',
         width: '23%',
+        editor: {
+          type: 'custom',
+          component: TitleCustomEditorComponent,
+        },
+       /*  filter: {
+          type: 'custom',
+          component: TitleCustomEditorComponent
+        } */
       },
       authors: {
         title: 'Author',
@@ -128,7 +136,7 @@ export class BooksComponent implements OnInit {
         valuePrepareFunction: (cell?: Author[]) => {
           var value = '';
           for (var i = 0; i < cell.length; i++) {
-            value += cell[i].authorName + ' & ';
+            value += cell[i].authorName + ' | ';
           }
           return value.slice(0, -2);
         },
@@ -172,10 +180,12 @@ export class BooksComponent implements OnInit {
         },
         width: '15%',
         editor: {
-          type: 'list',
+          /* type: 'list',
           config: {
             list: this.categoriesListForEditor,
-          },
+          }, */
+          type: 'custom',
+          component: CategoryCustomEditorComponent
         },
         filter: {
           type: 'list',
@@ -208,6 +218,10 @@ export class BooksComponent implements OnInit {
                 currency: 'USD',
               }).format(value);
         },
+        editor:{
+          type: 'custom',
+          component: PriceCustomEditorComponent
+        }
       },
       imageURL: {
         title: 'Cover',

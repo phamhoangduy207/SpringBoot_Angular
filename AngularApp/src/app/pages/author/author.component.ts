@@ -126,8 +126,8 @@ export class AuthorComponent {
 
   onSaveConfirm(event: any): void {
     var data = {
-      authorName: event.newData.description,
-      author_id: event.newData.cat_id,
+      authorName: event.newData.authorName,
+      author_id: event.newData.author_id,
     };
     if(data.authorName === ''){
       this.toastr.warning('Please provide a description', 'Warning');
