@@ -2,7 +2,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { User } from '../models/user.model';
 import { Book } from "../models/book.model";
-import { AuthService } from './auth.service';
 import { Category } from '../models/category.model';
 import { Author } from '../models/author';
 @Injectable({
@@ -10,23 +9,23 @@ import { Author } from '../models/author';
 })
 export class RestApiService {
 
-
+  //HttpClientModule is used here
   constructor(private http: HttpClient) { }
   
-  readonly baseURL = "http://localhost:8080/api";
+  readonly baseURL = "http://localhost:8080/api"; //backend environment
 
   //user
   user: User = new User(); 
 
   getUsers(){
-    return this.http.get<User>("http://localhost:8080/auth/users");
+    return this.http.get<User>("http://localhost:8080/auth/users"); //UserController enpoint
   }
   
 
   //book
   book: Book = new Book();
   getBooks(){
-    return this.http.get<Book>(this.baseURL + "/books");
+    return this.http.get<Book>(this.baseURL + "/books"); //BookController enpoints
   }
 
   createBooks(){

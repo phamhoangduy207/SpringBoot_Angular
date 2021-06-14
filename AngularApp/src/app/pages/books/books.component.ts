@@ -338,13 +338,13 @@ export class BooksComponent implements OnInit {
     var autor = [];
     for (var i = 0; i < event.newData.authors.length; i++) {
       autor.push({
-        author_id: event.newData.authors[i]
+        author_id: event.newData.authors[i].author_id,
       });
     }
     var data = {
       title: event.newData.title,
       category: {
-        cat_id: event.newData.category,
+        cat_id: event.newData.category.cat_id,
       },
       authors: autor,
       published: event.newData.published,

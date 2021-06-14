@@ -31,8 +31,10 @@ export class AuthComponent implements OnInit {
     if(this.form.valid){
         const username = this.form.get('username')?.value;
         const password = this.form.get('password')?.value;
+        //Calling authenticationService() from another class
         this.authService.authenticationService(username, password).subscribe(
           (res) => {
+            //And comeback here later
             this.router.navigate(['admin/dashboard']);
           },
           () => {

@@ -3,6 +3,7 @@ package com.springbootcrud.api.model;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,6 +27,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class Category implements Serializable{
+
 
 	/**
 	 * 

@@ -8,25 +8,17 @@ import { map } from 'rxjs/operators';
 })
 export class AuthService {
   USER_NAME_SESSION_ATTRIBUTE_NAME = 'authenticatedUser';
-  public credentials = { username: '', password: '' };
   constructor(private http: HttpClient, private cookieService: CookieService) {}
 
   authenticationService(username, password) {
-    //console.log('Staring authService');
+    //This is where the backend called
     return this.http
-      .get(`http://localhost:8080/auth/login`, {
+      .get(`http://localhost:8080/api/greeting`, {
         headers: {
-          //basic token based on username and password, recieve a sessionid
+          //Passing Authorization header with value is a basic token (window.btoa())
           Authorization: this.createBasicAuthToken(username, password),
         },
-      })
-      .pipe(
-        map((res) => {
-          //console.log(this.cookieService.get('JSESSIONID'));
-          this.credentials.username = username;
-          this.registerSuccessfulLogin(this.credentials);
-        })
-      );
+      });
   }
 
   createBasicAuthToken(username, password) {
@@ -34,33 +26,15 @@ export class AuthService {
     return 'Basic ' + window.btoa(username + ':' + password);
   }
 
-  registerSuccessfulLogin(obj) {
-    //console.log('Storing information');
-    sessionStorage.setItem(
-      this.USER_NAME_SESSION_ATTRIBUTE_NAME,
-      JSON.stringify(Object.values(obj))
-    );
-  }
-
   logout() {
-    console.log('logging out');
-    sessionStorage.clear();
+    //console.log('logging out');
     this.cookieService.delete('JSESSIONID', '/', 'localhost');
-    this.credentials.username = null;
-    this.credentials.password = null;
   }
 
   isUserLoggedIn() {
-    let user = sessionStorage.getItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME);
-    if (user === null) return false;
+    let user = this.cookieService.get('JSESSIONID');
+    if (user == '') return false;
     return true;
-  }
-
-  getLoggedInUserName() {
-    let user = sessionStorage.getItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME);
-    if (user === null) return '';
-    let usr = JSON.parse(user);
-    return usr[0];
   }
 
   getUserName() {

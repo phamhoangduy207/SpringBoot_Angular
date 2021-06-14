@@ -71,7 +71,7 @@ export class CategoryCustomEditorComponent
   listItems: Category[] = [];
   selectedItem: Category;
   showData() {
-    console.log(this.selectedItem.description)
+    console.log(this.selectedItem.description);
     this.cell.newValue = this.selectedItem.cat_id;
   }
 
@@ -92,11 +92,29 @@ export class CategoryCustomEditorComponent
 //Title Editor
 @Component({
   selector: 'selector-name',
-  template: `<input nbInput placeholder="Title" (keyup)="showData($event)" />`,
+  template: `<input
+    nbInput
+    placeholder="Title"
+    [(ngModel)]="inputModel"
+    (keyup)="showData($event)"
+  />`,
 })
-export class TitleCustomEditorComponent extends DefaultEditor {
+export class TitleCustomEditorComponent
+  extends DefaultEditor
+  implements OnInit
+{
   constructor() {
     super();
+  }
+
+  inputModel: string;
+
+  ngOnInit() {
+    if (this.cell.newValue) {
+      //console.log(this.cell.newValue);
+      this.inputModel = this.cell.newValue;
+      this.cell.newValue = this.inputModel;
+    }
   }
 
   showData(event: any) {
@@ -108,13 +126,27 @@ export class TitleCustomEditorComponent extends DefaultEditor {
 //Price Editor
 @Component({
   selector: 'selector-name',
-  template: `<input nbInput placeholder="Price" (keyup)="showData($event)" />`,
+  template: `<input
+    nbInput
+    placeholder="Price"
+    [(ngModel)]="inputModel"
+    (keyup)="showData($event)"
+  />`,
 })
-export class PriceCustomEditorComponent extends DefaultEditor {
+export class PriceCustomEditorComponent
+  extends DefaultEditor
+  implements OnInit
+{
   constructor() {
     super();
   }
-
+  inputModel: string;
+  ngOnInit() {
+    if (this.cell.newValue) {
+      this.inputModel = this.cell.newValue;
+      this.cell.newValue = this.inputModel;
+    }
+  }
   showData(event: any) {
     console.log(event.target.value);
     this.cell.newValue = event.target.value;

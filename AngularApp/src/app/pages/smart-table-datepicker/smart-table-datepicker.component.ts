@@ -33,7 +33,7 @@ export class SmartTableDatepickerComponent extends DefaultEditor implements OnIn
     }
 
     if (this.cell.newValue) {
-      console.log(this.cell.newValue);
+      //console.log(this.cell.newValue);
       let cellValue = new Date(this.cell.newValue);
       if (
         cellValue.getTime() >= this.min.getTime() &&

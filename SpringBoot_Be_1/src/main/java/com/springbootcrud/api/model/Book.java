@@ -17,7 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.Table;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,9 +42,7 @@ public class Book implements Serializable {
 
 	private String title;
 
-//	@Column(name = "author_name")
-//	private String authorName;
-	@ManyToMany(cascade =  CascadeType.MERGE )
+	@ManyToMany()
 	@JoinTable(name = "book_author", joinColumns = { @JoinColumn(name = "book_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "author_id") })
 	private Set<Author> authors;

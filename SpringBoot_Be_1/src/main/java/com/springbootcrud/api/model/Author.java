@@ -2,12 +2,14 @@ package com.springbootcrud.api.model;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -18,7 +20,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity(name = "authors")
-//@Table(name = "books")
+//@Table(name = "authors")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -32,7 +34,7 @@ public class Author {
 	@Column(name = "author_name")
 	private String authorName;
 	
-	@ManyToMany(mappedBy = "authors")
+	@ManyToMany(mappedBy = "authors", cascade = CascadeType.MERGE)
 	@JsonIgnore
 	private Set<Book> books;
 }
