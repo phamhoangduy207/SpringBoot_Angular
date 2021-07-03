@@ -148,7 +148,7 @@ export class PriceCustomEditorComponent
     }
   }
   showData(event: any) {
-    console.log(event.target.value);
+    //console.log(event.target.value);
     this.cell.newValue = event.target.value;
   }
 }
